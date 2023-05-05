@@ -105,31 +105,19 @@ Predictions <- expand.grid(ReleaseTL = as.integer(seq(min(SpeciesSurvival$Releas
                            Season = c("Winter", "Early Spring", "Late Spring"))
                            
 
-LinearPredictors <- predict(DALModel, newdata = Predictions, type = "link")
-PredictedProb <- exp(LinearPredictors)/(1+exp(LinearPredictors))
-PredictedDF <- data.frame(Predictions, PredictedProb)
-
-DALGraph <- ggplot(PredictedDF, aes(x = ReleaseTL, y = PredictedProb, color = Season)) + 
-  geom_line(linewidth = 1) +
-  labs(x = 'TL at Release', y = 'Detection Probability', color = 'Season') + 
-  theme(plot.margin = margin(.75,.75,.75,.75, unit = 'cm'), 
-        axis.title.x = element_text(vjust = -2), axis.title.y = element_text(vjust = 5))
-
-DALGraph
-
 Predictors <- predict(DALModel, newdata = Predictions, type = "response", se.fit = TRUE)
 lowerCI <- Predictors$fit - (1.96 * Predictors$se.fit)
 upperCI <- Predictors$fit + (1.96 * Predictors$se.fit)
 Predicted <- cbind(Predictions, Predictors, lowerCI, upperCI)
 
-DALGraph2 <- ggplot(Predicted, aes(x = ReleaseTL, y = fit, color = Season)) + 
+DALGraph <- ggplot(Predicted, aes(x = ReleaseTL, y = fit, color = Season)) + 
   geom_line(linewidth = 1) + 
  labs(x = 'Total Length (mm)', y = 'Detection Probability', color = 'Season') + 
  theme(plot.margin = margin(.75,.75,.75,.75, unit = 'cm'), 
      axis.title.x = element_text(vjust = -2), axis.title.y = element_text(vjust = 5)) +
  geom_ribbon(aes(x = ReleaseTL, ymin = lowerCI, ymax = upperCI, fill = Season), alpha = 0.3)
 
-DALGraph2
+DALGraph
 
 Survived <- SpeciesSurvival %>% 
   filter(Alive == 1)
