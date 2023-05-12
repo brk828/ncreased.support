@@ -27,18 +27,18 @@ SummerStartMonth <- 6 # Start of Summer/Fall usually few fish are released
 WinterStartMonth <- 11 # Start of Winter month
 
 # Load data workspace or downlod and load if more than 7 days old
-if(file.exists("BasinScanningIndex.RData")){
-  data_info <- file.info("BasinScanningIndex.RData")
+if(file.exists("data/BasinScanningIndex.RData")){
+  data_info <- file.info("data/BasinScanningIndex.RData")
   data_date <- as.Date(data_info$mtime)
   if(data_date>Sys.Date() - 7){
-    load("BasinScanningIndex.RData")
+    load("data/BasinScanningIndex.RData")
     } else {
-      download_basin()
-      load("BasinScanningIndex.RData")
+      download_basin("data")
+      load("data/BasinScanningIndex.RData")
     }
 } else {
-  download_basin()
-  load("BasinScanningIndex.RData")
+  download_basin("data")
+  load("data/BasinScanningIndex.RData")
 }
 
 # Load the R workspace file into the R session
