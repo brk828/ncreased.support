@@ -1,8 +1,9 @@
 # B. Kesner 12 May 2023
 # Script to analyze and improve PITMFG and PITPrefix fields in scan_data
 # Load useful lab functions
-source("LabFunctions.R") # includes package loads for dplyr and lubridate
-
+source("LabFunctions.R")
+packages(dplyr)
+packages(lubridate)
 # remove unnecessary functions
 rm(euclid, split_hourly, download_nfwg, download_backwater)
 
@@ -127,7 +128,8 @@ ReachRecapture <- BasinRecapturesReachV %>%
   summarise(R = n_distinct(PITIndex)) %>%
   ungroup()
 
-rm(BasinCapturesZoneV, BasinMarksZoneV, BasinRecapturesZoneV)  
+rm(BasinCapturesZoneV, BasinMarksZoneV, BasinRecapturesZoneV, BasinCapturesReachV, BasinRecapturesReachV, 
+   BasinMarksReachV)  
 
 ZoneEstimates <- ZoneMark %>%
   inner_join(ZoneCapture, by = c("Species" = "Species",
@@ -158,4 +160,5 @@ ReachEstimates <- ReachMark %>%
          Estimate = ((M + 1) * (C + 1))/(R + 1)) %>%
   mutate(Lower95CI = ((M + 1) * (C + 1))/(UpperBoundR + 1),
          Upper95CI = ((M + 1) * (C + 1))/(LowerBoundR + 1))
-  
+
+rm(ReachMark, ReachRecapture, ReachCapture, ZoneCapture, ZoneMark, ZoneRecapture)
