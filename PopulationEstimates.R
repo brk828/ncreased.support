@@ -23,6 +23,8 @@ if(file.exists("data/BasinScanningIndex.RData")){
 
 rm(download_basin, data_info, data_date, Unit, TripTable, ReachTable, BasinEffort)
 
+# Marks are restricted to January or February of the census year (month < 3)
+# The census year is equal to the year of scanning
 BasinMarksZone <- BasinContacts %>% 
   select(Reach, DecimalZone, Date, PIT) %>%
   filter(month(Date) < 3) %>%
@@ -31,6 +33,9 @@ BasinMarksZone <- BasinContacts %>%
   summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
   ungroup()
 
+# Captures are restricted to October through April (month > 9 or month < 5)
+# The census year is the year in which the October scanning begins but a year less
+# than scans for January through April, Fiscal Year is a year ahead of this schedule 
 BasinCapturesZone <- BasinContacts %>% 
   select(Reach, DecimalZone, Date, PIT, ScanFY) %>%
   filter(month(Date) > 9| month(Date) < 5) %>%
@@ -39,6 +44,8 @@ BasinCapturesZone <- BasinContacts %>%
   summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
   ungroup()
 
+# Verified marks include a record in the BasinPITIndex where the FirstCensus field
+# determines the first year the PIT tag meets the criteria to be included in an estimate
 BasinMarksZoneV <- BasinMarksZone %>%
   inner_join(BasinPITIndex %>% 
                select(PIT, PITIndex, Species, Reach, FirstCensus), 
