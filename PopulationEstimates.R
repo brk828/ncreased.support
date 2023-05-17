@@ -1,5 +1,5 @@
 # B. Kesner 12 May 2023
-# Script to analyze and improve PITMFG and PITPrefix fields in scan_data
+# Script to produce Reach and zone population estimates based on PIT scanning
 # Load useful lab functions
 source("LabFunctions.R")
 packages(dplyr)
@@ -140,11 +140,14 @@ ZoneEstimates <- ZoneMark %>%
                                  "CensusYear" = "CensusYear")) %>%
   filter(R>3) %>%
   arrange(Species, DecimalZone, CensusYear) %>%
-  mutate(LowerBoundR = qpois(0.05, R),
-         UpperBoundR = qpois(0.95, R),
-         Estimate = ((M + 1) * (C + 1))/(R + 1)) %>%
-  mutate(Lower95CI = ((M + 1) * (C + 1))/(UpperBoundR + 1),
-         Upper95CI = ((M + 1) * (C + 1))/(LowerBoundR + 1))
+  mutate(LowerBoundR = qpois(0.025, R),
+         UpperBoundR = qpois(0.975, R),
+         Estimate = as.integer(((M + 1) * (C + 1))/(R + 1))) %>%
+  mutate(LowerQP95CI = as.integer(((M + 1) * (C + 1))/(UpperBoundR + 1)),
+         UpperQP95CI = as.integer(((M + 1) * (C + 1))/(LowerBoundR + 1)),
+         SE = as.integer((sqrt(((M+1)^2*(C+1)*(C-R)/((R+2)*(R+1)^2))))),
+         LowerN95CI = as.integer(Estimate-(1.96*SE)),
+         UpperN95CI = as.integer(Estimate+(1.96*SE)))
 
 ReachEstimates <- ReachMark %>%
   inner_join(ReachCapture, by = c("Species" = "Species",
@@ -155,10 +158,15 @@ ReachEstimates <- ReachMark %>%
                                    "CensusYear" = "CensusYear")) %>%
   filter(R>3) %>%
   arrange(Species, Reach, CensusYear) %>%
-  mutate(LowerBoundR = qpois(0.05, R),
-         UpperBoundR = qpois(0.95, R),
-         Estimate = ((M + 1) * (C + 1))/(R + 1)) %>%
-  mutate(Lower95CI = ((M + 1) * (C + 1))/(UpperBoundR + 1),
-         Upper95CI = ((M + 1) * (C + 1))/(LowerBoundR + 1))
+  mutate(LowerBoundR = qpois(0.025, R),
+         UpperBoundR = qpois(0.975, R),
+         Estimate = as.integer(((M + 1) * (C + 1))/(R + 1))) %>%
+  mutate(LowerQP95CI = as.integer(((M + 1) * (C + 1))/(UpperBoundR + 1)),
+         UpperQP95CI = as.integer(((M + 1) * (C + 1))/(LowerBoundR + 1)),
+         SE = as.integer((sqrt(((M+1)^2*(C+1)*(C-R)/((R+2)*(R+1)^2))))),
+         LowerN95CI = as.integer(Estimate-(1.96*SE)),
+         UpperN95CI = as.integer(Estimate+(1.96*SE)))
 
-rm(ReachMark, ReachRecapture, ReachCapture, ZoneCapture, ZoneMark, ZoneRecapture)
+write.csv(ZoneEstimates, file="output/ZonePopulationEstimates.csv")
+write.csv(ReachEstimates, file="output/ReachPopulationEstimates.csv")
+
