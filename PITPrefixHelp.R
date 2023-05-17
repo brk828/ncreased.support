@@ -29,19 +29,23 @@ BasinPrefixIndex <- BasinContacts %>%
   summarise(count = n()) %>%
   ungroup() %>%
   group_by(PIT) %>%
-  top_n(n = 1, wt = count)
+  top_n(n = 1, wt = count) %>%
+  ungroup()
 
+# Identify PIT scans that have more than one prefix
 BasinPrefixIndexDupes <- BasinPrefixIndex %>%
   group_by(PIT) %>%
   summarise(count = n()) %>%
-  filter(count>1)
+  filter(count>1) %>%
+  ungroup()
 
+# These prefixes need to be fixed in the scanning database
 BasinContactsBadPrefix <- BasinContacts %>% 
   filter(!is.na(PITPrefix)) %>%
   group_by(PIT, PITMFG, PITPrefix) %>%
   summarise(contacts = n()) %>%
   inner_join(BasinPrefixIndex %>% 
-               select(PIT, IndexPrefix = PITPrefix, IndexMFG = PITMFG),
+               select(PIT, IndexPrefix = PITPrefix, IndexMFG = PITMFG, IndexCount = count),
              by = "PIT") %>%
   filter(PITPrefix != IndexPrefix)
 
