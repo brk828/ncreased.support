@@ -147,7 +147,19 @@ ZoneEstimates <- ZoneMark %>%
          UpperQP95CI = as.integer(((M + 1) * (C + 1))/(LowerBoundR + 1)),
          SE = as.integer((sqrt(((M+1)^2*(C+1)*(C-R)/((R+2)*(R+1)^2))))),
          LowerN95CI = as.integer(Estimate-(1.96*SE)),
-         UpperN95CI = as.integer(Estimate+(1.96*SE)))
+         UpperN95CI = as.integer(Estimate+(1.96*SE))) %>%
+  na.omit()
+
+# Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
+# use normal distribution estimates.
+ZoneEstimates <- ZoneEstimates %>%
+  mutate(Year = as.factor(CensusYear),
+         Estimate = as.numeric(Estimate),
+         Zone = as.factor(DecimalZone),
+         LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),
+         UpperCI = ifelse(R<=30, UpperQP95CI, UpperN95CI)) %>%
+  select(Species, Year, Zone, M, C, R, Estimate, SE, LowerCI, UpperCI)
+
 
 ReachEstimates <- ReachMark %>%
   inner_join(ReachCapture, by = c("Species" = "Species",
@@ -165,8 +177,44 @@ ReachEstimates <- ReachMark %>%
          UpperQP95CI = as.integer(((M + 1) * (C + 1))/(LowerBoundR + 1)),
          SE = as.integer((sqrt(((M+1)^2*(C+1)*(C-R)/((R+2)*(R+1)^2))))),
          LowerN95CI = as.integer(Estimate-(1.96*SE)),
-         UpperN95CI = as.integer(Estimate+(1.96*SE)))
+         UpperN95CI = as.integer(Estimate+(1.96*SE))) %>%
+  na.omit()
+
+# Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
+# use normal distribution estimates.
+ReachEstimates <- ReachEstimates %>%
+  mutate(Year = as.factor(CensusYear),
+         Estimate = as.numeric(Estimate),
+         Reach = as.factor(Reach),
+         LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),
+         UpperCI = ifelse(R<=30, UpperQP95CI, UpperN95CI)) %>%
+  select(Species, Year, Reach, M, C, R, Estimate, SE, LowerCI, UpperCI)
+
 
 write.csv(ZoneEstimates, file="output/ZonePopulationEstimates.csv")
 write.csv(ReachEstimates, file="output/ReachPopulationEstimates.csv")
 
+#
+packages(googlesheets4)
+
+# If Google sheet access has not previously been established on current computer
+# the first time the following line is run it will require Google Authentication
+# After initial run, a login token will be stored in the dependencies folder
+gs4_auth(cache = "dependencies", email = "brk828@gmail.com")
+
+# Create a new sheet with the following line, update as needed.  
+# This only needs to be run to create a new sheet
+
+# sheet <- gs4_create("PopulationEstimates", sheets = c("Zones", "Reaches"))
+
+# writing data to the sheet requires the sheetID which can be obtained by viewing the information stored
+# in the sheet object
+
+# sheet
+
+# Change sheetID to match the ID found in sheet
+sheetID <- "1ub6stAPzrdNUR0K3L9sFj-5JETRgjBSfTIvhXVdIEpg"
+
+# write sheet data
+write_sheet(ReachEstimates, sheetID, "Reaches")
+write_sheet(ZoneEstimates, sheetID, "Zones")

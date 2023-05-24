@@ -6,34 +6,11 @@ source("LabFunctions.R")
 packages(ggplot2)
 packages(dplyr)
 
-data <- read.csv("output/ZonePopulationEstimates.csv", header = TRUE)
-
-# Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
-# use normal distribution estimates.
-ZoneEstimates <- data %>%
-  na.omit(data) %>% 
-  mutate(Year = as.factor(CensusYear),
-         Estimate = as.numeric(Estimate),
-         Zone = as.factor(DecimalZone),
-         LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),
-         UpperCI = ifelse(R<=30, UpperQP95CI, UpperN95CI)) %>%
-  select(-X,-LowerQP95CI, -LowerN95CI, -UpperQP95CI, -UpperN95CI, -DecimalZone, -CensusYear)
-
-data <- read.csv("output/ReachPopulationEstimates.csv", header = TRUE)
-
-# Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
-# use normal distribution estimates.
-ReachEstimates <- data %>%
-  na.omit(data) %>% 
-  mutate(Year = as.factor(CensusYear),
-         Estimate = as.numeric(Estimate),
-         Reach = as.factor(Reach),
-         LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),
-         UpperCI = ifelse(R<=30, UpperQP95CI, UpperN95CI)) %>%
-  select(-X,-LowerQP95CI, -LowerN95CI, -UpperQP95CI, -UpperN95CI, -CensusYear)
+ZoneEstimates <- read.csv("output/ZonePopulationEstimates.csv", header = TRUE)
+ReachEstimates <- read.csv("output/ReachPopulationEstimates.csv", header = TRUE)
 
 
-#####increse number of tick marks 
+#####increase number of tick marks 
 
 number_ticks <- function(n) {function(limits) pretty(limits, n)}
 
