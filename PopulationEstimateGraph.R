@@ -37,7 +37,13 @@ ReachEstimates <- data %>%
 
 number_ticks <- function(n) {function(limits) pretty(limits, n)}
 
-plot = ggplot(data = ZoneEstimates, aes(x=Year, y = Estimate, group = Zone)) +
+XYTEZoneEstimates <- ZoneEstimates %>%
+  filter(Species == "XYTE")
+
+XYTEReachEstimates <- ReachEstimates %>%
+  filter(Species == "XYTE")
+
+plot = ggplot(data = XYTEZoneEstimates, aes(x=Year, y = Estimate, group = Zone)) +
   geom_line(aes(color = Zone)) +
   geom_point(aes(color = Zone), size = 2)+
   geom_ribbon(aes(ymin = LowerCI, ymax = UpperCI), linetype = 2, alpha = 0.1)+
@@ -48,7 +54,6 @@ plot = ggplot(data = ZoneEstimates, aes(x=Year, y = Estimate, group = Zone)) +
   theme(axis.text = element_text(size = 13))+
   theme(axis.title = element_text(size = 13))+
   theme(legend.text = element_text(size = 13))+
-  scale_color_discrete(labels=c("River", "Basin"))+
   scale_x_discrete(breaks=number_ticks(8)) +
   scale_y_continuous(breaks=number_ticks(8)) +
   theme(legend.title = element_blank())+
@@ -57,9 +62,13 @@ plot = ggplot(data = ZoneEstimates, aes(x=Year, y = Estimate, group = Zone)) +
   theme(legend.position = "top")
 
 plot
+
+jpeg("output/XYTEZoneEstimates.jpeg", units = "in", width = 11, height = 5, res = 300)
+plot
+dev.off()
 ############
 #########write graph 
-plot = ggplot(data = ReachEstimates, aes(x = Year, y = Estimate, group = Reach)) +
+plot = ggplot(data = XYTEReachEstimates, aes(x = Year, y = Estimate, group = Reach)) +
   geom_line(aes(color = Reach)) +
   geom_point(aes(color = Reach), size = 2)+
   geom_ribbon(aes(ymin = LowerCI, ymax = UpperCI), linetype = 2, alpha = 0.1)+
@@ -80,7 +89,7 @@ plot = ggplot(data = ReachEstimates, aes(x = Year, y = Estimate, group = Reach))
 
 plot
 
-jpeg("output/PopulationEstimates.jpeg", units = "in", width = 11, height = 5, res = 300)
+jpeg("output/XYTEReachEstimates.jpeg", units = "in", width = 11, height = 5, res = 300)
 plot
 dev.off()
 
