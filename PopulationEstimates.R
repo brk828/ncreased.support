@@ -139,7 +139,7 @@ ZoneEstimates <- ZoneMark %>%
                                  "DecimalZone" = "DecimalZone",
                                  "CensusYear" = "CensusYear")) %>%
   filter(R>3) %>%
-  arrange(Species, DecimalZone, CensusYear) %>%
+  arrange(DecimalZone, Species, CensusYear) %>%
   mutate(LowerBoundR = qpois(0.025, R),
          UpperBoundR = qpois(0.975, R),
          Estimate = as.integer(((M + 1) * (C + 1))/(R + 1))) %>%
@@ -153,7 +153,7 @@ ZoneEstimates <- ZoneMark %>%
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
 ZoneEstimates <- ZoneEstimates %>%
-  mutate(Year = as.factor(CensusYear),
+  mutate(Year = as.integer(CensusYear),
          Estimate = as.numeric(Estimate),
          Zone = as.factor(DecimalZone),
          LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),
@@ -169,7 +169,7 @@ ReachEstimates <- ReachMark %>%
                                    "Reach" = "Reach",
                                    "CensusYear" = "CensusYear")) %>%
   filter(R>3) %>%
-  arrange(Species, Reach, CensusYear) %>%
+  arrange(Reach, Species, CensusYear) %>%
   mutate(LowerBoundR = qpois(0.025, R),
          UpperBoundR = qpois(0.975, R),
          Estimate = as.integer(((M + 1) * (C + 1))/(R + 1))) %>%
@@ -183,7 +183,7 @@ ReachEstimates <- ReachMark %>%
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
 ReachEstimates <- ReachEstimates %>%
-  mutate(Year = as.factor(CensusYear),
+  mutate(Year = as.integer(CensusYear),
          Estimate = as.numeric(Estimate),
          Reach = as.factor(Reach),
          LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),

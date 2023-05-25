@@ -5,11 +5,15 @@ source("LabFunctions.R")
 
 packages(ggplot2)
 packages(dplyr)
+packages(googlesheets4)
 
-ZoneEstimates <- read.csv("output/ZonePopulationEstimates.csv", header = TRUE)
-ReachEstimates <- read.csv("output/ReachPopulationEstimates.csv", header = TRUE)
+gs4_deauth()
+sheet_id <- "https://docs.google.com/spreadsheets/d/1ub6stAPzrdNUR0K3L9sFj-5JETRgjBSfTIvhXVdIEpg/edit?usp=sharing"
+ZoneEstimates <- read_sheet(sheet_id, "Zones")
+ReachEstimates <- read_sheet(sheet_id, "Reaches")
 
-
+ZoneEstimates$Year <- as.factor(ZoneEstimates$Year)
+ReachEstimates$Year <- as.factor(ReachEstimates$Year)
 #####increase number of tick marks 
 
 number_ticks <- function(n) {function(limits) pretty(limits, n)}
