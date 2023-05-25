@@ -193,7 +193,7 @@ ReachEstimates <- ReachEstimates %>%
 
 write.csv(ZoneEstimates, file="output/ZonePopulationEstimates.csv")
 write.csv(ReachEstimates, file="output/ReachPopulationEstimates.csv")
-
+write.csv(ReachEstimates, file="ReachEstimatesGraph/ReachPopulationEstimates.csv")
 #
 packages(googlesheets4)
 
