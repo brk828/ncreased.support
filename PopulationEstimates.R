@@ -193,8 +193,8 @@ ReachEstimates <- ReachEstimates %>%
 
 write.csv(ZoneEstimates, file="output/ZonePopulationEstimates.csv")
 write.csv(ReachEstimates, file="output/ReachPopulationEstimates.csv")
-write.csv(ReachEstimates, file="ReachEstimatesGraph/ReachPopulationEstimates.csv")
-#
+
+# Write to Google Sheet for shiny app use.
 packages(googlesheets4)
 
 # If Google sheet access has not previously been established on current computer
