@@ -58,10 +58,10 @@ BasinMarksZoneV <- BasinMarksZone %>%
 
 BasinCapturesZoneV <- BasinCapturesZone %>%
   inner_join(BasinPITIndex %>% 
-               select(PIT, PITIndex, Species, Reach, FirstCensus), 
+               select(PIT, PITIndex, Species, Reach, TLCM, ReleaseKm, ReleaseYear, FirstCensus), 
              by = c("PIT" = "PIT", "Reach" = "Reach")) %>%
   filter(CensusYear >= FirstCensus) %>%
-  group_by(Reach, DecimalZone, CensusYear, Species, PITIndex) %>%
+  group_by(Reach, DecimalZone, CensusYear, TLCM, ReleaseKm, ReleaseYear, Species, PITIndex) %>%
   summarise(PITContacted = n(), FirstPIT = min(PIT), SecondPIT = max(PIT)) %>%
   ungroup()
 
@@ -96,7 +96,7 @@ BasinRecapturesReachV <- BasinMarksReachV %>%
                     "CensusYear" = "CensusYear", 
                     "PITIndex" = "PITIndex"))
 
-rm(BasinContacts, BasinCapturesZone, BasinMarksZone)
+rm(BasinCapturesZone, BasinMarksZone)
 
 ZoneMark <- BasinMarksZoneV %>%
   group_by(Species, DecimalZone, CensusYear) %>%
@@ -128,7 +128,7 @@ ReachRecapture <- BasinRecapturesReachV %>%
   summarise(R = n_distinct(PITIndex)) %>%
   ungroup()
 
-rm(BasinCapturesZoneV, BasinMarksZoneV, BasinRecapturesZoneV, BasinCapturesReachV, BasinRecapturesReachV, 
+rm(BasinMarksZoneV, BasinRecapturesZoneV, BasinCapturesReachV, BasinRecapturesReachV, 
    BasinMarksReachV)  
 
 ZoneEstimates <- ZoneMark %>%
@@ -153,12 +153,16 @@ ZoneEstimates <- ZoneMark %>%
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
 ZoneEstimates <- ZoneEstimates %>%
+  inner_join(Zone %>%
+               select(DecimalZone, ZoneName = Name, ZoneDescription = Description),
+             by = "DecimalZone") %>%
   mutate(Year = as.integer(CensusYear),
          Estimate = as.numeric(Estimate),
-         Zone = as.factor(DecimalZone),
+         DecimalZone = as.factor(DecimalZone),
          LowerCI = ifelse(R<=30, LowerQP95CI, LowerN95CI),
          UpperCI = ifelse(R<=30, UpperQP95CI, UpperN95CI)) %>%
-  select(Species, Year, Zone, M, C, R, Estimate, SE, LowerCI, UpperCI)
+  select(Species, Year, DecimalZone, ZoneName, ZoneDescription, 
+         M, C, R, Estimate, SE, LowerCI, UpperCI)
 
 
 ReachEstimates <- ReachMark %>%
@@ -191,6 +195,25 @@ ReachEstimates <- ReachEstimates %>%
   select(Species, Year, Reach, M, C, R, Estimate, SE, LowerCI, UpperCI)
 
 
+ZoneCleanReleaseC <- BasinCapturesZoneV %>% 
+  filter(!is.na(TLCM), !is.na(ReleaseKm), ReleaseKm > 0, CensusYear>= max(CensusYear)-2) 
+
+ZoneTLCMSummary <- ZoneCleanReleaseC %>%
+  group_by(DecimalZone, CensusYear, ReleaseYear, TLCM) %>%
+  summarise(Count = n_distinct(PITIndex)) %>%
+  inner_join(Zone %>%
+               select(DecimalZone, ZoneName = Name, ZoneDescription = Description),
+             by = "DecimalZone") %>%
+  ungroup()
+
+ZoneReleaseKmSummary <- ZoneCleanReleaseC %>%
+  group_by(DecimalZone, CensusYear, ReleaseYear, ReleaseKm) %>%
+  summarise(Count = n_distinct(PITIndex)) %>%
+  inner_join(Zone %>%
+               select(DecimalZone, ZoneName = Name, ZoneDescription = Description),
+             by = "DecimalZone") %>%
+  ungroup()
+
 write.csv(ZoneEstimates, file="output/ZonePopulationEstimates.csv")
 write.csv(ReachEstimates, file="output/ReachPopulationEstimates.csv")
 
@@ -218,3 +241,6 @@ sheetID <- "1ub6stAPzrdNUR0K3L9sFj-5JETRgjBSfTIvhXVdIEpg"
 # write sheet data
 write_sheet(ReachEstimates, sheetID, "Reaches")
 write_sheet(ZoneEstimates, sheetID, "Zones")
+write_sheet(ZoneReleaseKmSummary, sheetID, "ReleaseKmSummary")
+write_sheet(ZoneTLCMSummary, sheetID, "ReleaseTLSummary")
+
