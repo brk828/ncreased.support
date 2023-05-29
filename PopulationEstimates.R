@@ -152,7 +152,8 @@ ZoneEstimates <- ZoneMark %>%
 
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
-ZoneEstimates <- ZoneEstimates %>%
+ZoneEstimatesXYTE <- ZoneEstimates %>%
+  filter(Species == "XYTE") %>%
   inner_join(Zone %>%
                select(DecimalZone, ZoneName = Name, ZoneDescription = Description),
              by = "DecimalZone") %>%
@@ -184,9 +185,10 @@ ReachEstimates <- ReachMark %>%
          UpperN95CI = as.integer(Estimate+(1.96*SE))) %>%
   na.omit()
 
+MaxCensusYear <- max(ReachEstimates$CensusYear)
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
-ReachEstimates <- ReachEstimates %>%
+ReachEstimatesXYTE <- ReachEstimates %>%
   mutate(Year = as.integer(CensusYear),
          Estimate = as.numeric(Estimate),
          Reach = as.factor(Reach),
@@ -195,10 +197,11 @@ ReachEstimates <- ReachEstimates %>%
   select(Species, Year, Reach, M, C, R, Estimate, SE, LowerCI, UpperCI)
 
 
-ZoneCleanReleaseC <- BasinCapturesZoneV %>% 
-  filter(!is.na(TLCM), !is.na(ReleaseKm), ReleaseKm > 0, CensusYear>= max(CensusYear)-2) 
+ZoneCleanXYTE <- BasinCapturesZoneV %>% 
+  filter(!is.na(TLCM), !is.na(ReleaseKm), ReleaseKm > 0, CensusYear == MaxCensusYear,
+         Species == 'XYTE') 
 
-ZoneTLCMSummary <- ZoneCleanReleaseC %>%
+ZoneTLCMXYTE <- ZoneCleanReleaseC %>%
   group_by(DecimalZone, CensusYear, ReleaseYear, TLCM) %>%
   summarise(Count = n_distinct(PITIndex)) %>%
   inner_join(Zone %>%
@@ -206,7 +209,16 @@ ZoneTLCMSummary <- ZoneCleanReleaseC %>%
              by = "DecimalZone") %>%
   ungroup()
 
-ZoneReleaseKmSummary <- ZoneCleanReleaseC %>%
+ReleaseTLCMXYTE <- BasinReleases %>%
+  filter(Species == "XYTE", !is.na(TLCM), ReleaseYear < MaxCensusYear) %>%
+  group_by(ReleaseZone, ReleaseYear, TLCM) %>%
+  summarise(Count = n_distinct(PIT1)) %>%
+  inner_join(Zone %>%
+               select(DecimalZone, ZoneName = Name, ZoneDescription = Description),
+             by = c("ReleaseZone" = "DecimalZone")) %>%
+  ungroup()
+
+ZoneReleaseKmXYTE <- ZoneCleanReleaseC %>%
   group_by(DecimalZone, CensusYear, ReleaseYear, ReleaseKm) %>%
   summarise(Count = n_distinct(PITIndex)) %>%
   inner_join(Zone %>%
@@ -240,7 +252,8 @@ sheetID <- "1ub6stAPzrdNUR0K3L9sFj-5JETRgjBSfTIvhXVdIEpg"
 
 # write sheet data
 write_sheet(ReachEstimates, sheetID, "Reaches")
-write_sheet(ZoneEstimates, sheetID, "Zones")
-write_sheet(ZoneReleaseKmSummary, sheetID, "ReleaseKmSummary")
-write_sheet(ZoneTLCMSummary, sheetID, "ReleaseTLSummary")
+write_sheet(ZoneEstimatesXYTE, sheetID, "Zones")
+write_sheet(ZoneReleaseKmXYTE, sheetID, "ReleaseKmSummary")
+write_sheet(ZoneTLCMXYTE, sheetID, "ReleaseTLSummary")
+write_sheet(ReleaseTLCMXYTE, sheetID, "AllReleasesTL")
 
