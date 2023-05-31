@@ -54,8 +54,9 @@ StalwartContacts <- BasinContacts %>%
 StalwartSummary <- StalwartContacts %>%
   group_by(Reach, ReleaseZone, ReleaseKm, Species, Sex, ScanFY, ScanMonth, Latitude, Longitude, Location, 
            LID, RiverKm, ScanZone, PIT) %>%
-  summarise(Contacts = n(), Dispersal = mean(DispersalKm)) %>%
-  ungroup()
+  summarise(Contacts = n(), Dispersal = as.integer(mean(DispersalKm))) %>%
+  ungroup() %>%
+  mutate(LatLong = paste0(Latitude,",",Longitude))
 
 # Write to Google Sheet for shiny app use.
 packages(googlesheets4)
