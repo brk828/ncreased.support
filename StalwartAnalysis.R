@@ -36,7 +36,7 @@ CutoffFY <- 2013
 BasinStalwarts <- BasinReleases %>%
   mutate(LastScanFY = ifelse(month(LastScanPIT1)>9, year(LastScanPIT1)+1,year(LastScanPIT1))) %>%
   filter(ReleaseDate == DatePIT1, LastScanFY > CurrentFY - 2, 
-         !is.na(ReleaseTL), ReleaseFY < CutoffFY) %>%
+         !is.na(ReleaseTL), ReleaseFY < CutoffFY, ReleaseKm > 0) %>%
   select(Reach, Species, Sex, ReleaseFY, ReleaseDate, ReleaseTL, TLCM, ReleaseZone, ReleaseLocation, 
          ReleaseLID, ReleaseKm, StockingID, RearingLocation, PIT = PIT1, LastScan = LastScanPIT1,
          LastScanFY, MaxDAL) %>%
@@ -44,16 +44,17 @@ BasinStalwarts <- BasinReleases %>%
   arrange(Species, Reach, ReleaseFY, ReleaseMonth, PIT)
 
 StalwartContacts <- BasinContacts %>%
-  inner_join(BasinStalwarts %>% select(PIT, Reach, Sex, Species), 
+  inner_join(BasinStalwarts %>% select(PIT, Reach, Sex, Species, ReleaseZone, ReleaseKm), 
              by = c("PIT" = "PIT", "Reach" = "Reach")) %>%
   filter(ScanFY >= CutoffFY, ScanFY <= CurrentFY - 2) %>%
-  select(Species, Sex, PIT, EID, Date, ScanHr, DateTime, LID, Location, Latitude, Longitude, 
+  select(Reach, ReleaseZone, ReleaseKm, Species, Sex, PIT, EID, Date, ScanHr, DateTime, LID, Location, Latitude, Longitude, 
          ScanZone = DecimalZone, RiverKm, UnitType, ScanFY) %>%
-  mutate(ScanMonth = month(DateTime))
+  mutate(ScanMonth = month(DateTime), DispersalKm = abs(ReleaseKm - RiverKm))
 
 StalwartSummary <- StalwartContacts %>%
-  group_by(Species, Sex, ScanFY, ScanMonth, ScanHr, Latitude, Longitude, Location, LID, RiverKm, ScanZone) %>%
-  summarise(Contacts = n(), UniqueFish = n_distinct(PIT)) %>%
+  group_by(Reach, ReleaseZone, ReleaseKm, Species, Sex, ScanFY, ScanMonth, Latitude, Longitude, Location, 
+           LID, RiverKm, ScanZone, PIT) %>%
+  summarise(Contacts = n(), Dispersal = mean(DispersalKm)) %>%
   ungroup()
 
 # Write to Google Sheet for shiny app use.
