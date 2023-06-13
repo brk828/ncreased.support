@@ -1,73 +1,61 @@
-"","Species","Year","DecimalZone","ZoneName","ZoneDescription","M","C","R","Estimate","SE","LowerCI","UpperCI"
-"1","XYTE",2016,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",14,52,4,159,61,88,397
-"2","XYTE",2017,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",61,86,36,145,17,111,178
-"3","XYTE",2018,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",73,91,42,158,17,124,191
-"4","XYTE",2019,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",92,69,39,162,16,130,193
-"5","XYTE",2020,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",73,106,50,155,15,125,184
-"6","XYTE",2021,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",54,106,38,150,19,112,187
-"7","XYTE",2022,"1.3","Lake Mead - Virgin","Grebe Bay to Flamingo Coyote Cove ",109,160,85,205,15,175,234
-"8","XYTE",2011,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",228,884,139,1447,111,1229,1664
-"9","XYTE",2012,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",572,992,362,1567,65,1439,1694
-"10","XYTE",2013,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",908,1074,516,1890,59,1774,2005
-"11","XYTE",2014,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",712,1314,470,1990,73,1846,2133
-"12","XYTE",2015,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",1009,1321,643,2073,58,1959,2186
-"13","XYTE",2016,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",800,1756,623,2255,72,2113,2396
-"14","XYTE",2017,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",832,1632,643,2112,64,1986,2237
-"15","XYTE",2018,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",1030,1643,787,2150,55,2042,2257
-"16","XYTE",2019,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",815,1646,583,2301,76,2152,2449
-"17","XYTE",2020,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",1381,1912,867,3045,76,2896,3193
-"18","XYTE",2021,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",1161,1747,693,2926,86,2757,3094
-"19","XYTE",2022,"2.1","Lake Mohave - River","Hoover Dam to Chalk Cliff Lights
-",1334,1667,617,3603,114,3379,3826
-"20","XYTE",2010,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",110,80,27,321,48,230,499
-"21","XYTE",2011,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",62,575,45,788,110,572,1003
-"22","XYTE",2012,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",569,1093,481,1293,44,1206,1379
-"23","XYTE",2013,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",994,1031,718,1428,29,1371,1484
-"24","XYTE",2014,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",972,1281,736,1692,40,1613,1770
-"25","XYTE",2015,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1084,1562,907,1867,40,1788,1945
-"26","XYTE",2016,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1412,1482,1089,1922,29,1865,1978
-"27","XYTE",2017,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1237,1670,1077,1919,34,1852,1985
-"28","XYTE",2018,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1466,1718,1248,2019,29,1962,2075
-"29","XYTE",2019,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1536,1620,1148,2168,34,2101,2234
-"30","XYTE",2020,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1542,1475,825,2757,63,2633,2880
-"31","XYTE",2021,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1092,2148,833,2816,76,2667,2964
-"32","XYTE",2022,"2.3","Lake Mohave - Basin","Below Owl Point Cove to Clam Cove/South Haystack Cove. Below RM 29 to RM 11.8 NV and 11.9 AZ",1696,2652,1365,3295,62,3173,3416
-"33","CALA",2021,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",8,15,5,24,7,13,72
-"34","XYTE",2012,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",537,748,179,2238,145,1953,2522
-"35","XYTE",2013,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",394,1159,177,2574,177,2227,2920
-"36","XYTE",2014,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",875,1780,369,4216,194,3835,4596
-"37","XYTE",2015,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",1564,1654,656,3942,119,3708,4175
-"38","XYTE",2016,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",1249,1070,276,4833,249,4344,5321
-"39","XYTE",2017,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",457,1047,126,3779,313,3165,4392
-"40","XYTE",2018,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",494,2553,253,4977,295,4398,5555
-"41","XYTE",2019,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",1862,2532,1003,4700,115,4474,4925
-"42","XYTE",2020,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",2028,3335,1315,5143,110,4927,5358
-"43","XYTE",2021,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",2837,2512,1320,5398,102,5198,5597
-"44","XYTE",2022,"3.1","Lake Havasu - Upper River","Davis Dam to above Park Moabi",2268,3241,1271,5783,126,5536,6029
-"45","XYTE",2013,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",618,427,146,1802,120,1566,2037
-"46","XYTE",2014,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",355,731,123,2101,171,1765,2436
-"47","XYTE",2015,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",703,898,379,1665,64,1539,1790
-"48","XYTE",2016,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",981,474,275,1690,65,1562,1817
-"49","XYTE",2017,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",297,336,134,743,49,646,839
-"50","XYTE",2018,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",180,365,69,946,101,748,1143
-"51","XYTE",2019,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",150,512,68,1122,124,878,1365
-"52","XYTE",2020,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",591,477,174,1617,97,1426,1807
-"53","XYTE",2021,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",421,301,114,1108,80,951,1264
-"54","XYTE",2022,"3.2","Lake Havasu - Lower River","Park Moabi (inclusive) to Delta (inclusive)",366,579,106,1989,172,1651,2326
-"55","XYTE",2017,"4.3","Reach 4 - Blythe","Palo Verde Dam to Farmer's Bridge",132,65,56,154,7,140,167
-"56","XYTE",2018,"4.3","Reach 4 - Blythe","Palo Verde Dam to Farmer's Bridge",81,112,62,147,12,123,170
-"57","XYTE",2019,"4.3","Reach 4 - Blythe","Palo Verde Dam to Farmer's Bridge",326,167,152,359,8,343,374
-"58","XYTE",2020,"4.3","Reach 4 - Blythe","Palo Verde Dam to Farmer's Bridge",825,525,462,938,15,908,967
-"59","XYTE",2021,"4.3","Reach 4 - Blythe","Palo Verde Dam to Farmer's Bridge",897,484,373,1164,28,1109,1218
-"60","XYTE",2022,"4.3","Reach 4 - Blythe","Palo Verde Dam to Farmer's Bridge",1158,786,412,2208,74,2062,2353
+"","Species","DecimalZone","CensusYear","M","C","R","LowerBoundR","UpperBoundR","Estimate","LowerQP95CI","UpperQP95CI","SE","LowerN95CI","UpperN95CI"
+"1","XYTE","1.3",2016,14,52,4,1,8,159,88,397,61,39,278
+"2","XYTE","1.3",2017,61,86,36,25,48,145,110,207,17,111,178
+"3","XYTE","1.3",2018,73,91,42,30,55,158,121,219,17,124,191
+"4","XYTE","1.3",2019,92,69,39,27,52,162,122,232,16,130,193
+"5","XYTE","1.3",2020,73,106,50,37,64,155,121,208,15,125,184
+"6","XYTE","1.3",2021,54,106,38,26,51,150,113,217,19,112,187
+"7","XYTE","1.3",2022,109,160,85,67,104,205,168,260,15,175,234
+"8","XYTE","2.1",2011,228,884,139,116,163,1447,1235,1732,111,1229,1664
+"9","XYTE","2.1",2012,572,992,362,325,400,1567,1418,1745,65,1439,1694
+"10","XYTE","2.1",2013,908,1074,516,472,561,1890,1738,2065,59,1774,2005
+"11","XYTE","2.1",2014,712,1314,470,428,513,1990,1824,2185,73,1846,2133
+"12","XYTE","2.1",2015,1009,1321,643,594,693,2073,1923,2244,58,1959,2186
+"13","XYTE","2.1",2016,800,1756,623,575,672,2255,2091,2443,72,2113,2396
+"14","XYTE","2.1",2017,832,1632,643,594,693,2112,1960,2286,64,1986,2237
+"15","XYTE","2.1",2018,1030,1643,787,732,842,2150,2010,2312,55,2042,2257
+"16","XYTE","2.1",2019,815,1646,583,536,631,2301,2126,2502,76,2152,2449
+"17","XYTE","2.1",2020,1381,1912,867,810,925,3045,2855,3259,76,2896,3193
+"18","XYTE","2.1",2021,1161,1747,693,642,745,2926,2722,3158,86,2757,3094
+"19","XYTE","2.1",2022,1334,1667,617,569,666,3603,3338,3906,114,3379,3826
+"20","XYTE","2.3",2010,110,80,27,17,38,321,230,499,48,226,415
+"21","XYTE","2.3",2011,62,575,45,32,59,788,604,1099,110,572,1003
+"22","XYTE","2.3",2012,569,1093,481,438,524,1293,1187,1420,44,1206,1379
+"23","XYTE","2.3",2013,994,1031,718,666,771,1428,1330,1539,29,1371,1484
+"24","XYTE","2.3",2014,972,1281,736,683,790,1692,1576,1823,40,1613,1770
+"25","XYTE","2.3",2015,1084,1562,907,848,966,1867,1753,1997,40,1788,1945
+"26","XYTE","2.3",2016,1412,1482,1089,1025,1154,1922,1814,2042,29,1865,1978
+"27","XYTE","2.3",2017,1237,1670,1077,1013,1142,1919,1809,2040,34,1852,1985
+"28","XYTE","2.3",2018,1466,1718,1248,1179,1318,2019,1911,2137,29,1962,2075
+"29","XYTE","2.3",2019,1536,1620,1148,1082,1215,2168,2048,2300,34,2101,2234
+"30","XYTE","2.3",2020,1542,1475,825,769,882,2757,2579,2957,63,2633,2880
+"31","XYTE","2.3",2021,1092,2148,833,777,890,2816,2636,3019,76,2667,2964
+"32","XYTE","2.3",2022,1696,2652,1365,1293,1438,3295,3128,3479,62,3173,3416
+"33","CALA","3.1",2021,8,15,5,1,10,24,13,72,7,10,37
+"34","XYTE","3.1",2012,537,748,179,153,206,2238,1946,2616,145,1953,2522
+"35","XYTE","3.1",2013,394,1159,177,151,204,2574,2235,3014,177,2227,2920
+"36","XYTE","3.1",2014,875,1780,369,332,407,4216,3823,4685,194,3835,4596
+"37","XYTE","3.1",2015,1564,1654,656,606,707,3942,3658,4267,119,3708,4175
+"38","XYTE","3.1",2016,1249,1070,276,244,309,4833,4318,5464,249,4344,5321
+"39","XYTE","3.1",2017,457,1047,126,104,148,3779,3221,4571,313,3165,4392
+"40","XYTE","3.1",2018,494,2553,253,222,285,4977,4420,5669,295,4398,5555
+"41","XYTE","3.1",2019,1862,2532,1003,941,1066,4700,4422,5009,115,4474,4925
+"42","XYTE","3.1",2020,2028,3335,1315,1244,1387,5143,4876,5436,110,4927,5358
+"43","XYTE","3.1",2021,2837,2512,1320,1249,1392,5398,5119,5705,102,5198,5597
+"44","XYTE","3.1",2022,2268,3241,1271,1202,1341,5783,5481,6114,126,5536,6029
+"45","XYTE","3.2",2013,618,427,146,123,170,1802,1549,2136,120,1566,2037
+"46","XYTE","3.2",2014,355,731,123,102,145,2101,1784,2530,171,1765,2436
+"47","XYTE","3.2",2015,703,898,379,341,418,1665,1510,1850,64,1539,1790
+"48","XYTE","3.2",2016,981,474,275,243,308,1690,1509,1911,65,1562,1817
+"49","XYTE","3.2",2017,297,336,134,112,157,743,635,888,49,646,839
+"50","XYTE","3.2",2018,180,365,69,53,86,946,761,1226,101,748,1143
+"51","XYTE","3.2",2019,150,512,68,52,85,1122,900,1461,124,878,1365
+"52","XYTE","3.2",2020,591,477,174,149,200,1617,1407,1886,97,1426,1807
+"53","XYTE","3.2",2021,421,301,114,94,135,1108,937,1341,80,951,1264
+"54","XYTE","3.2",2022,366,579,106,86,127,1989,1662,2446,172,1651,2326
+"55","XYTE","4.3",2017,132,65,56,42,71,154,121,204,7,140,167
+"56","XYTE","4.3",2018,81,112,62,47,78,147,117,193,12,123,170
+"57","XYTE","4.3",2019,326,167,152,128,177,359,308,425,8,343,374
+"58","XYTE","4.3",2020,825,525,462,420,505,938,858,1032,15,908,967
+"59","XYTE","4.3",2021,897,484,373,336,411,1164,1057,1292,28,1109,1218
+"60","XYTE","4.3",2022,1158,786,412,373,452,2208,2013,2438,74,2062,2353

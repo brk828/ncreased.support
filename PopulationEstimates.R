@@ -7,6 +7,9 @@ packages(lubridate)
 # remove unnecessary functions
 rm(euclid, split_hourly, download_nfwg, download_backwater)
 
+# LabFunctions has a timout setting, but isn't retained
+options(timeout = 400)
+
 # Load data workspace or downlod and load if more than 7 days old
 if(file.exists("data/BasinScanningIndex.RData")){
   data_info <- file.info("data/BasinScanningIndex.RData")
@@ -188,7 +191,7 @@ ReachEstimates <- ReachMark %>%
 MaxCensusYear <- max(ReachEstimates$CensusYear)
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
-ReachEstimatesXYTE <- ReachEstimates %>%
+ReachEstimatesClean <- ReachEstimates %>%
   mutate(Year = as.integer(CensusYear),
          Estimate = as.numeric(Estimate),
          Reach = as.factor(Reach),
@@ -201,7 +204,7 @@ ZoneCleanXYTE <- BasinCapturesZoneV %>%
   filter(!is.na(TLCM), !is.na(ReleaseKm), ReleaseKm > 0, CensusYear == MaxCensusYear,
          Species == 'XYTE') 
 
-ZoneTLCMXYTE <- ZoneCleanReleaseC %>%
+ZoneTLCMXYTE <- ZoneCleanXYTE %>%
   group_by(DecimalZone, CensusYear, ReleaseYear, TLCM) %>%
   summarise(Count = n_distinct(PITIndex)) %>%
   inner_join(Zone %>%
@@ -218,7 +221,7 @@ ReleaseTLCMXYTE <- BasinReleases %>%
              by = c("ReleaseZone" = "DecimalZone")) %>%
   ungroup()
 
-ZoneReleaseKmXYTE <- ZoneCleanReleaseC %>%
+ZoneReleaseKmXYTE <- ZoneCleanXYTE %>%
   group_by(DecimalZone, CensusYear, ReleaseYear, ReleaseKm) %>%
   summarise(Count = n_distinct(PITIndex)) %>%
   inner_join(Zone %>%
@@ -251,7 +254,7 @@ gs4_auth(cache = "dependencies", email = "brk828@gmail.com")
 sheetID <- "1ub6stAPzrdNUR0K3L9sFj-5JETRgjBSfTIvhXVdIEpg"
 
 # write sheet data
-write_sheet(ReachEstimates, sheetID, "Reaches")
+write_sheet(ReachEstimatesClean, sheetID, "Reaches")
 write_sheet(ZoneEstimatesXYTE, sheetID, "Zones")
 write_sheet(ZoneReleaseKmXYTE, sheetID, "ReleaseKmSummary")
 write_sheet(ZoneTLCMXYTE, sheetID, "ReleaseTLSummary")
