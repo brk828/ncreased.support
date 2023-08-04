@@ -28,11 +28,11 @@ CurrentMonth <- month(Sys.Date())
 CurrentFY <- ifelse(CurrentMonth>9, year(Sys.Date())+1,year(Sys.Date()))
 
 # Set ReleaseFY cutoff, fish must be released before this Fiscal year
-CutoffFY <- 2013
+CutoffFY <- 2011
 
 # Going to look for fish released with a 134 kHz PIT tag, and have reliably had that tag 
 # contacted in the most recent 2 years of PIT scanning.
-# Fiscal year window controls release date (before Fiscal Year 2013)
+# Fiscal year window controls release date (before Fiscal Year 2011)
 BasinStalwarts <- BasinReleases %>%
   mutate(LastScanFY = ifelse(month(LastScanPIT1)>9, year(LastScanPIT1)+1,year(LastScanPIT1))) %>%
   filter(ReleaseDate == DatePIT1, LastScanFY > CurrentFY - 2, 
@@ -46,7 +46,7 @@ BasinStalwarts <- BasinReleases %>%
 StalwartContacts <- BasinContacts %>%
   inner_join(BasinStalwarts %>% select(PIT, Reach, Sex, Species, ReleaseZone, ReleaseKm), 
              by = c("PIT" = "PIT", "Reach" = "Reach")) %>%
-  filter(ScanFY >= CutoffFY, ScanFY <= CurrentFY - 2) %>%
+  filter(ScanFY > CutoffFY + 1, ScanFY <= CurrentFY - 2) %>%
   select(Reach, ReleaseZone, ReleaseKm, Species, Sex, PIT, EID, Date, ScanHr, DateTime, LID, Location, Latitude, Longitude, 
          ScanZone = DecimalZone, RiverKm, UnitType, ScanFY) %>%
   mutate(ScanMonth = month(DateTime), DispersalKm = abs(ReleaseKm - RiverKm))

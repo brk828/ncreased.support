@@ -24,9 +24,9 @@ XYTEZoneEstimates <- ZoneEstimates %>%
 XYTEReachEstimates <- ReachEstimates %>%
   filter(Species == "XYTE")
 
-plot = ggplot(data = XYTEZoneEstimates, aes(x=Year, y = Estimate, group = Zone)) +
-  geom_line(aes(color = Zone)) +
-  geom_point(aes(color = Zone), size = 2)+
+plot = ggplot(data = XYTEZoneEstimates, aes(x=Year, y = Estimate, group = DecimalZone)) +
+  geom_line(aes(color = DecimalZone)) +
+  geom_point(aes(color = DecimalZone), size = 2)+
   geom_ribbon(aes(ymin = LowerCI, ymax = UpperCI), linetype = 2, alpha = 0.1)+
   labs(x = "Year", y = "Population estimate", fill = "location")+
   theme_classic()+ 
