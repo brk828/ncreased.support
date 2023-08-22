@@ -170,16 +170,76 @@ ReachContactsDL <- ReachContacts %>%
   summarise(Contacts = n()) %>%
   ungroup()
 
+# Marks are restricted to January or February of the census year (month < 3)
+# The census year is equal to the year of scanning
+ReachMarks <- ReachContacts %>% 
+  select(Reach, DecimalZone, Date, PITIndex, FirstCensus, CensusYear = ScanFY, Species) %>%
+  filter(month(Date) < 3, CensusYear >= FirstCensus, CensusYear>= 2015) %>%
+  group_by(CensusYear, DecimalZone, PITIndex, Species) %>%
+  summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
+  ungroup() 
+
+ReachCaptures <- ReachContacts %>%
+  mutate(CensusYear = ScanFY - 1) %>%
+  select(Reach, DecimalZone, Date, PITIndex, FirstCensus, CensusYear, Species) %>%
+  filter(month(Date) > 9| month(Date) < 5, CensusYear >= FirstCensus, CensusYear>= 2015) %>%
+  group_by(CensusYear, DecimalZone, PITIndex, Species) %>%
+  summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
+  ungroup() 
+
+ReachRecaptures <- ReachMarks %>%
+  inner_join(ReachCaptures %>%
+               select(CensusYear, PITIndex), 
+             by = c("CensusYear" = "CensusYear", 
+                    "PITIndex" = "PITIndex"))
+
+Mark <- ReachMarks %>%
+  group_by(Species, DecimalZone, CensusYear) %>%
+  summarise(M = n_distinct(PITIndex)) %>%
+  ungroup()
+
+Capture <- ReachCaptures %>%
+  group_by(Species, DecimalZone, CensusYear) %>%
+  summarise(C = n_distinct(PITIndex)) %>%
+  ungroup()
+
+Recapture <- ReachRecaptures %>%
+  group_by(Species, DecimalZone, CensusYear) %>%
+  summarise(R = n_distinct(PITIndex)) %>%
+  ungroup()
+
+Estimates <- Mark %>%
+  inner_join(Capture, by = c("Species" = "Species",
+                             "DecimalZone" = "DecimalZone",
+                             "CensusYear" = "CensusYear")) %>%
+  inner_join(Recapture, by = c("Species" = "Species",
+                               "DecimalZone" = "DecimalZone",
+                               "CensusYear" = "CensusYear")) %>%
+  filter(R>3) %>%
+  arrange(DecimalZone, Species, CensusYear) %>%
+  mutate(LowerBoundR = qpois(0.025, R),
+         UpperBoundR = qpois(0.975, R),
+         Estimate = as.integer(((M + 1) * (C + 1))/(R + 1))) %>%
+  mutate(LowerQP95CI = as.integer(((M + 1) * (C + 1))/(UpperBoundR + 1)),
+         UpperQP95CI = as.integer(((M + 1) * (C + 1))/(LowerBoundR + 1)),
+         SE = as.integer((sqrt(((M+1)^2*(C+1)*(C-R)/((R+2)*(R+1)^2))))),
+         LowerN95CI = as.integer(Estimate-(1.96*SE)),
+         UpperN95CI = as.integer(Estimate+(1.96*SE))) %>%
+  na.omit()
+
 packages(openxlsx) # package openxlsx is required
 wb <- createWorkbook() # creates object to hold workbook sheets
 addWorksheet(wb, "ReachContacts") # add worksheet
 addWorksheet(wb, "ReachEffort") # add worksheet
 addWorksheet(wb, "FieldTaggedContacts") # add worksheet
 addWorksheet(wb, "PotentialMortalities") # add worksheet
+addWorksheet(wb, "PopulationEstimates") # add worksheet
 writeData(wb, "ReachContacts", ReachContactsDL) # write dataframe (second argument) to worksheet
 writeData(wb, "ReachEffort", ReachEffort) # write dataframe (second argument) to worksheet
 writeData(wb, "FieldTaggedContacts", ReachContactsNoRelease) # write dataframe 
 writeData(wb, "PotentialMortalities", ReachContactsMort) # write dataframe 
+writeData(wb, "PopulationEstimates", Estimates) # write dataframe 
+
 
 
 # Last step is to save workbook. Give a useful name.  Adding date time ensures this step
