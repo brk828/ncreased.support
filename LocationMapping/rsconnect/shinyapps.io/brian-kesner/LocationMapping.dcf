@@ -5,7 +5,7 @@ account: brian-kesner
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10292001
-bundleId: 7844880
+bundleId: 7845143
 url: https://brian-kesner.shinyapps.io/LocationMapping/
 version: 1
 asMultiple: FALSE

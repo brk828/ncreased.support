@@ -2,6 +2,7 @@ library(shiny)
 library(leaflet)
 library(sf)
 library(dplyr)
+library(sp)
 
 get_polygon <- function(lat, lon) {
   # Create a SpatialPoints object from the input coordinates
