@@ -37,8 +37,8 @@ ui <- fluidPage(
     # Sidebar panel for inputs
     sidebarPanel(
       tags$form(
-        numericInput("lat", "Latitude", value = 0), 
-        numericInput("lon", "Longitude", value = 0),
+        numericInput("lat", "Latitude", value = 35.4762), 
+        numericInput("lon", "Longitude", value = -114.6619),
         submitButton("Map Point", icon("map-marker"))
       ),
       verbatimTextOutput("polygon_name")
@@ -70,7 +70,7 @@ server <- function(input, output) {
                 fillOpacity = 0.3,
                 highlight = highlightOptions(
                   weight = 3,
-                  fillOpacity = 1.0,
+                  fillOpacity = 0.7,
                   opacity = 1.0,
                   bringToFront = TRUE,
                   sendToBack = TRUE),  
@@ -97,7 +97,8 @@ server <- function(input, output) {
     # Add a marker based on the input coordinates
     leafletProxy("map") %>%
       clearMarkers() %>%
-      addMarkers(lng = coords()[1], lat = coords()[2])
+      addMarkers(lng = coords()[1], lat = coords()[2]) %>%
+      setView(lng = coords()[1], lat = coords()[2], zoom = 12) 
   })
 }
 
