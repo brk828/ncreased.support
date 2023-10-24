@@ -3,7 +3,9 @@
 # Load useful lab functions
 
 # Assign Study Reach
-StudyReach = 4
+StudyReach = 3
+StartDate = "2021-10-01"
+EndDate = "2023-05-30"
 
 source("LabFunctions.R")
 packages(dplyr)
@@ -35,7 +37,9 @@ rm(download_basin, data_info, data_date, Unit, ReachTable)
 
 # Reduce data to Study Reach, checking to ensure there are no orphans
 
-ReachContacts <- BasinContacts %>% filter(Reach == StudyReach)
+ReachContacts <- BasinContacts %>% filter(Reach == StudyReach) %>%
+  filter(Date >= as.Date(StartDate), Date <= as.Date(EndDate))
+
 rm(BasinContacts)
 
 ReachReleases <- BasinReleases %>% filter(Reach == StudyReach)
@@ -159,11 +163,8 @@ ReachContactsMort <- ReachContacts %>%
   summarise(Contacts = n(), MaxDate = max(Date)) %>%
   ungroup() %>%
   left_join(ReachEffort %>% select(EID, Location, Deploy, Retrieve, ScanTime), by = "EID") %>%
-  filter(Contacts/ScanTime > 0.8 & ScanTime>0 & MaxDate <= as.Date(Retrieve))
+  filter(Contacts/ScanTime > 0.9 & ScanTime>0 & MaxDate <= as.Date(Retrieve))
   
-ReachContacts <- ReachContacts %>%
-  anti_join(ReachContactsMort, by = c("EID", "PIT"))
-
 ReachContactsDL <- ReachContacts %>% 
   group_by(TripID, EID, ScanDate = Date, ScanZone = DecimalZone, Species, PIT, PITIndex, Sex, ScanLocation = Location, 
            RiverKm, Easting, Northing, ReleaseTL, ReleaseDate, ReleaseLocation, ReleaseZone) %>%
@@ -244,4 +245,6 @@ writeData(wb, "PopulationEstimates", Estimates) # write dataframe
 
 # Last step is to save workbook. Give a useful name.  Adding date time ensures this step
 # will not overwrite a previous version.  Location should be output folder
-saveWorkbook(wb, paste0("output/Reach",StudyReach, "Data",format(Sys.time(), "%Y%m%d"), ".xlsx"))
+saveWorkbook(wb, paste0("output/Reach",StudyReach, "Data",
+                        format(Sys.time(), "%Y%m%d"), ".xlsx"),
+             overwrite = TRUE)
