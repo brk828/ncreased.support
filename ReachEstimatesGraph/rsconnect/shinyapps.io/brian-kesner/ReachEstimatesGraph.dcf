@@ -5,9 +5,7 @@ account: brian-kesner
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 9182212
-bundleId: 7261233
+bundleId: 7844838
 url: https://brian-kesner.shinyapps.io/ReachEstimatesGraph/
-when: 1685000193.63568
-lastSyncTime: 1685000193.63568
 asMultiple: FALSE
 asStatic: FALSE
