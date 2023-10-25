@@ -98,7 +98,7 @@ server <- function(input, output) {
     leafletProxy("map") %>%
       clearMarkers() %>%
       addMarkers(lng = coords()[1], lat = coords()[2]) %>%
-      setView(lng = coords()[1], lat = coords()[2], zoom = 12) 
+      setView(lng = coords()[1], lat = coords()[2], zoom = 14) 
   })
 }
 

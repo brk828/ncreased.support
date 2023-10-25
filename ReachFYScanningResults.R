@@ -3,7 +3,7 @@
 # Load useful lab functions
 
 # Assign Study Reach
-StudyReach = 3
+StudyReach = 2
 StartDate = "2021-10-01"
 EndDate = "2023-05-30"
 
@@ -45,7 +45,8 @@ rm(BasinContacts)
 ReachReleases <- BasinReleases %>% filter(Reach == StudyReach)
 rm(BasinReleases)
 
-ReachEffort <- BasinEffort %>% filter(Reach == StudyReach)
+ReachEffort <- BasinEffort %>% filter(Reach == StudyReach) %>%
+  filter(Retrieve >= as.Date(StartDate), Retrieve <= as.Date(EndDate))
 
 ContactsWithoutEffort <- ReachContacts %>% anti_join(ReachEffort, by = "EID")
 
@@ -175,7 +176,7 @@ ReachContactsDL <- ReachContacts %>%
 # The census year is equal to the year of scanning
 ReachMarks <- ReachContacts %>% 
   select(Reach, DecimalZone, Date, PITIndex, FirstCensus, CensusYear = ScanFY, Species) %>%
-  filter(month(Date) < 3, CensusYear >= FirstCensus, CensusYear>= 2015) %>%
+  filter(month(Date) < 3, CensusYear >= FirstCensus) %>%
   group_by(CensusYear, DecimalZone, PITIndex, Species) %>%
   summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
   ungroup() 
@@ -183,16 +184,18 @@ ReachMarks <- ReachContacts %>%
 ReachCaptures <- ReachContacts %>%
   mutate(CensusYear = ScanFY - 1) %>%
   select(Reach, DecimalZone, Date, PITIndex, FirstCensus, CensusYear, Species) %>%
-  filter(month(Date) > 9| month(Date) < 5, CensusYear >= FirstCensus, CensusYear>= 2015) %>%
+  filter(month(Date) > 9| month(Date) < 5, CensusYear >= FirstCensus) %>%
   group_by(CensusYear, DecimalZone, PITIndex, Species) %>%
   summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
   ungroup() 
 
 ReachRecaptures <- ReachMarks %>%
   inner_join(ReachCaptures %>%
-               select(CensusYear, PITIndex), 
+               select(CensusYear, PITIndex, Species, DecimalZone), 
              by = c("CensusYear" = "CensusYear", 
-                    "PITIndex" = "PITIndex"))
+                    "PITIndex" = "PITIndex",
+                    "Species" = "Species",
+                    "DecimalZone" = "DecimalZone"))
 
 Mark <- ReachMarks %>%
   group_by(Species, DecimalZone, CensusYear) %>%
