@@ -7,6 +7,9 @@ packages(lubridate)
 # remove unnecessary functions
 rm(euclid, split_hourly, download_nfwg, download_backwater)
 
+MaxCensusYear <- ifelse(month(Sys.Date())>9, max(ReachEstimates$CensusYear)-1,
+                        max(ReachEstimates$CensusYear))  
+
 # LabFunctions has a timout setting, but isn't retained
 options(timeout = 400)
 
@@ -188,7 +191,6 @@ ReachEstimates <- ReachMark %>%
          UpperN95CI = as.integer(Estimate+(1.96*SE))) %>%
   na.omit()
 
-MaxCensusYear <- max(ReachEstimates$CensusYear)
 # Cleanup data and use quasipoisson for confidence intervals when recaptures are 30 or fewer otherwise
 # use normal distribution estimates.
 ReachEstimatesClean <- ReachEstimates %>%

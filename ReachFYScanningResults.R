@@ -3,9 +3,9 @@
 # Load useful lab functions
 
 # Assign Study Reach
-StudyReach = 2
+StudyReach = 3
 StartDate = "2021-10-01"
-EndDate = "2023-05-30"
+EndDate = "2023-05-31"
 
 source("LabFunctions.R")
 packages(dplyr)
@@ -238,6 +238,7 @@ addWorksheet(wb, "ReachEffort") # add worksheet
 addWorksheet(wb, "FieldTaggedContacts") # add worksheet
 addWorksheet(wb, "PotentialMortalities") # add worksheet
 addWorksheet(wb, "PopulationEstimates") # add worksheet
+
 writeData(wb, "ReachContacts", ReachContactsDL) # write dataframe (second argument) to worksheet
 writeData(wb, "ReachEffort", ReachEffort) # write dataframe (second argument) to worksheet
 writeData(wb, "FieldTaggedContacts", ReachContactsNoRelease) # write dataframe 

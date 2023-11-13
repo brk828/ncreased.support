@@ -1,0 +1,134 @@
+# B. Kesner 12 November 2023
+# Script to develop age structure for any reach like Lake Mohave report
+
+# Assign Study Reach
+StudyReach =
+TLCMCut = 40 # cutoff for release size classes
+StudySpecies = "XYTE"
+MinimumContacts = 200 # cutoff of total unique contacts per zone for inclusion in analysis
+FirstScanFY = 2015 # First FY of reach wide PIT scanning
+
+source("LabFunctions.R")
+packages(dplyr)
+packages(ggplot2)
+packages(lubridate)
+packages(lemon) # additional options for ggplot
+
+CurrentFY <- if_else(month(Sys.Date())>9, year(Sys.Date())+1, year(Sys.Date()))
+TLCutoffText <- paste0(TLCMCut, "0")
+
+# remove unnecessary functions
+rm(euclid, split_hourly, download_nfwg, download_backwater)
+
+# LabFunctions has a timout setting, but isn't retained
+options(timeout = 400)
+
+# Load data workspace or downlod and load if more than 7 days old
+if(file.exists("data/BasinScanningIndex.RData")){
+  data_info <- file.info("data/BasinScanningIndex.RData")
+  data_date <- as.Date(data_info$mtime)
+  if(data_date>Sys.Date() - 7){
+    load("data/BasinScanningIndex.RData")
+  } else {
+    download_basin("data")
+    load("data/BasinScanningIndex.RData")
+  }
+} else {
+  download_basin("data")
+  load("data/BasinScanningIndex.RData")
+}
+
+rm(download_basin, data_info, data_date, Unit, ReachTable)
+
+ReachReleaseSizes  <- BasinReleases %>%
+  filter(Species == StudySpecies, Reach == StudyReach,
+         ReleaseFY > 2007, ReleaseFY < CurrentFY - 2, !is.na(TLCM))%>%
+  mutate(Size = factor(ifelse(TLCM >= TLCMCut, 
+                       paste0(">=", TLCutoffText, " mm TL"), 
+                       paste0("<", TLCutoffText, " mm TL")))) %>%
+  dplyr::select( PIT1, ReleaseFY, ReleaseZone, TLCM, Size)
+
+rm(BasinReleases)
+
+SizePlot <- ggplot(ReachReleaseSizes, aes(ReleaseFY)) + 
+  geom_bar(aes(fill = Size), colour="black") +
+  scale_x_continuous(limits = c(2007, 2022), breaks = seq(2008, 2022, 2)) +
+  scale_y_continuous(limits = c(0, 10000)) +
+  scale_fill_manual(values = c('#FFFFFF','#000011')) +
+  labs(x = "Release FY", y = "Number of Fish Released") +
+  coord_capped_cart(bottom='both', left = 'both') +
+  theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
+SizePlot + facet_grid(ReleaseZone ~.)
+
+
+ReachYAL <- BasinContacts %>% 
+  filter(Reach == StudyReach)  %>%
+  select(-PITMFG, -PITPrefix, -DateTime, -Time) %>%
+  inner_join(BasinPITIndex %>%
+               select(Species, TLCM, ReleaseFY, Sex, PIT, PITIndex,
+                      ReleaseReach = Reach, ReleaseZone, FirstCensus), 
+             by = "PIT") %>%
+  mutate(ReleaseAge = ScanFY - ReleaseFY - 1) %>% 
+  filter(Species == StudySpecies, !is.na(ReleaseFY), 
+         ReleaseAge>0, ScanFY >= FirstScanFY) %>%
+  dplyr::select(PITIndex, ScanFY, ReleaseFY, Sex, TLCM, ReleaseZone, 
+                ScanZone = DecimalZone, ReleaseAge) %>% 
+  group_by(PITIndex, ScanFY, Sex, TLCM, ReleaseZone, ScanZone, ReleaseAge, ReleaseFY) %>%
+  summarise(Contacts = n()) %>%
+  ungroup()
+
+rm(BasinContacts, BasinEffort)
+
+Zones <- ReachYAL %>%
+  group_by(ScanZone) %>%
+  summarise(Count = n()) %>%
+  filter(Count > MinimumContacts) 
+
+ReachYALPlotData <- ReachYAL %>%
+  inner_join(Zones %>% select(ScanZone), by = "ScanZone")
+
+YearSplit <- median(unique(ReachYALPlotData$ScanFY))
+
+ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+                         filter(ScanFY < YearSplit, ScanZone == Zones$ScanZone[1]), 
+                       aes(ReleaseAge)) +
+  geom_bar(aes(fill = ReleaseZone), colour="black") +
+  scale_x_continuous(limits = c(0, 26), breaks = seq(0, 25, 5)) +
+  scale_y_continuous(limits = c(0, 1000))  +
+  labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
+  coord_capped_cart(bottom='both', left = 'both') +
+  theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
+ReachYALPlot + facet_grid(ScanFY ~.)
+
+ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+                         filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[1]), 
+                       aes(ReleaseAge)) +
+  geom_bar(aes(fill = ReleaseZone), colour="black") +
+  scale_x_continuous(limits = c(0, 26), breaks = seq(0, 25, 5)) +
+  scale_y_continuous(limits = c(0, 1000))  +
+  labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
+  coord_capped_cart(bottom='both', left = 'both') +
+  theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
+ReachYALPlot + facet_grid(ScanFY ~.)
+
+ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+                         filter(ScanFY < YearSplit, ScanZone == Zones$ScanZone[2]), 
+                       aes(ReleaseAge)) +
+  geom_bar(aes(fill = ReleaseZone), colour="black") +
+  scale_x_continuous(limits = c(0, 26), breaks = seq(0, 25, 5)) +
+  scale_y_continuous(limits = c(0, 1000))  +
+  labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
+  coord_capped_cart(bottom='both', left = 'both') +
+  theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
+ReachYALPlot + facet_grid(ScanFY ~.)
+
+ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+                         filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[2]), 
+                       aes(ReleaseAge)) +
+  geom_bar(aes(fill = ReleaseZone), colour="black") +
+  scale_x_continuous(limits = c(0, 26), breaks = seq(0, 25, 5)) +
+  scale_y_continuous(limits = c(0, 1000))  +
+  labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
+  coord_capped_cart(bottom='both', left = 'both') +
+  theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
+ReachYALPlot + facet_grid(ScanFY ~.)

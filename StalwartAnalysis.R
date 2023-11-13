@@ -30,7 +30,7 @@ CurrentFY <- ifelse(CurrentMonth>9, year(Sys.Date())+1,year(Sys.Date()))
 # Set ReleaseFY cutoff, fish must be released before this Fiscal year
 CutoffFY <- 2011
 
-# Going to look for fish released with a 134 kHz PIT tag, and have reliably had that tag 
+# Going to look for fish released with a 134 kHz PIT tag, and have had that tag 
 # contacted in the most recent 2 years of PIT scanning.
 # Fiscal year window controls release date (before Fiscal Year 2011)
 BasinStalwarts <- BasinReleases %>%

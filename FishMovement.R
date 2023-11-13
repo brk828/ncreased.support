@@ -35,7 +35,7 @@ Movement <- ReachContacts %>%
   group_by(PIT) %>%
   mutate(Distance = abs(RiverKm - lag(RiverKm, default = first(RiverKm)))) %>%
   ungroup %>%
-  filter(Distance > 1 | is.na(Distance), 
+  filter(Distance > 2 | is.na(Distance), 
          Latitude > 0, 
          Longitude < 0, 
          Latitude < 38,
