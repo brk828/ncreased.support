@@ -2,11 +2,9 @@
 # Script to develop age structure for any reach like Lake Mohave report
 
 # Assign Study Reach
-StudyReach =
 TLCMCut = 40 # cutoff for release size classes
 StudySpecies = "XYTE"
 MinimumContacts = 200 # cutoff of total unique contacts per zone for inclusion in analysis
-FirstScanFY = 2015 # First FY of reach wide PIT scanning
 
 source("LabFunctions.R")
 packages(dplyr)
@@ -52,7 +50,7 @@ rm(BasinReleases)
 
 SizePlot <- ggplot(ReachReleaseSizes, aes(ReleaseFY)) + 
   geom_bar(aes(fill = Size), colour="black") +
-  scale_x_continuous(limits = c(2007, 2022), breaks = seq(2008, 2022, 2)) +
+  scale_x_continuous(limits = c(2007, CurrentFY-1), breaks = seq(2008, CurrentFY-1, 2)) +
   scale_y_continuous(limits = c(0, 10000)) +
   scale_fill_manual(values = c('#FFFFFF','#000011')) +
   labs(x = "Release FY", y = "Number of Fish Released") +
@@ -89,7 +87,7 @@ ReachYALPlotData <- ReachYAL %>%
 
 YearSplit <- median(unique(ReachYALPlotData$ScanFY))
 
-ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+ReachYALPlot1 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY < YearSplit, ScanZone == Zones$ScanZone[1]), 
                        aes(ReleaseAge)) +
   geom_bar(aes(fill = ReleaseZone), colour="black") +
@@ -98,9 +96,9 @@ ReachYALPlot <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot + facet_grid(ScanFY ~.)
+ReachYALPlot1 + facet_grid(ScanFY ~.)
 
-ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+ReachYALPlot2 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[1]), 
                        aes(ReleaseAge)) +
   geom_bar(aes(fill = ReleaseZone), colour="black") +
@@ -109,9 +107,9 @@ ReachYALPlot <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot + facet_grid(ScanFY ~.)
+ReachYALPlot2 + facet_grid(ScanFY ~.)
 
-ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+ReachYALPlot3 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY < YearSplit, ScanZone == Zones$ScanZone[2]), 
                        aes(ReleaseAge)) +
   geom_bar(aes(fill = ReleaseZone), colour="black") +
@@ -120,9 +118,9 @@ ReachYALPlot <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot + facet_grid(ScanFY ~.)
+ReachYALPlot3 + facet_grid(ScanFY ~.)
 
-ReachYALPlot <- ggplot(ReachYALPlotData %>% 
+ReachYALPlot4 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[2]), 
                        aes(ReleaseAge)) +
   geom_bar(aes(fill = ReleaseZone), colour="black") +
@@ -131,4 +129,4 @@ ReachYALPlot <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot + facet_grid(ScanFY ~.)
+ReachYALPlot4 + facet_grid(ScanFY ~.)
