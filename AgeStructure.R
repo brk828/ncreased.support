@@ -1,7 +1,12 @@
 # B. Kesner 12 November 2023
 # Script to develop age structure for any reach like Lake Mohave report
 
-# Assign Study Reach
+# Assign Study Reach if not established
+if(exists("StudyReach") == FALSE) {StudyReach = 3}
+
+# Assign first scanning FY if not established 
+if(exists("FirstScanFY") == FALSE) {FirstScanFY = 2015}
+
 TLCMCut = 40 # cutoff for release size classes
 StudySpecies = "XYTE"
 MinimumContacts = 200 # cutoff of total unique contacts per zone for inclusion in analysis
@@ -56,11 +61,14 @@ SizePlot <- ggplot(ReachReleaseSizes, aes(ReleaseFY)) +
   labs(x = "Release FY", y = "Number of Fish Released") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-SizePlot + facet_grid(ReleaseZone ~.)
+SizePlot <- SizePlot + facet_grid(ReleaseZone ~.)
 
+png(paste0("output/Reach", StudyReach, "ReleaseCohorts.png"), width = 8, height = 6, units = 'in', res = 300)   
+SizePlot
+dev.off()
 
 ReachYAL <- BasinContacts %>% 
-  filter(Reach == StudyReach)  %>%
+  filter(Reach == StudyReach, ScanFY < CurrentFY)  %>%
   select(-PITMFG, -PITPrefix, -DateTime, -Time) %>%
   inner_join(BasinPITIndex %>%
                select(Species, TLCM, ReleaseFY, Sex, PIT, PITIndex,
@@ -96,7 +104,11 @@ ReachYALPlot1 <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot1 + facet_grid(ScanFY ~.)
+ReachYALPlot1 <- ReachYALPlot1 + facet_grid(ScanFY ~.)
+
+png(paste0("output/Reach", StudyReach, "YALPlot1.png"), width = 6, height = 4, units = 'in', res = 300)   
+ReachYALPlot1
+dev.off()
 
 ReachYALPlot2 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[1]), 
@@ -107,7 +119,11 @@ ReachYALPlot2 <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot2 + facet_grid(ScanFY ~.)
+ReachYALPlot2 <- ReachYALPlot2 + facet_grid(ScanFY ~.)
+
+png(paste0("output/Reach", StudyReach, "YALPlot2.png"), width = 6, height = 4, units = 'in', res = 300)   
+ReachYALPlot2
+dev.off()
 
 ReachYALPlot3 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY < YearSplit, ScanZone == Zones$ScanZone[2]), 
@@ -118,7 +134,11 @@ ReachYALPlot3 <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot3 + facet_grid(ScanFY ~.)
+ReachYALPlot3 <- ReachYALPlot3 + facet_grid(ScanFY ~.)
+
+png(paste0("output/Reach", StudyReach, "YALPlot3.png"), width = 6, height = 4, units = 'in', res = 300)   
+ReachYALPlot3
+dev.off()
 
 ReachYALPlot4 <- ggplot(ReachYALPlotData %>% 
                          filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[2]), 
@@ -129,4 +149,24 @@ ReachYALPlot4 <- ggplot(ReachYALPlotData %>%
   labs(x = "Years at Large", y = "Number of Unique Fish Scanned") +
   coord_capped_cart(bottom='both', left = 'both') +
   theme_bw(base_size = 15) + theme(panel.border = element_blank(), axis.line=element_line())
-ReachYALPlot4 + facet_grid(ScanFY ~.)
+ReachYALPlot4 <- ReachYALPlot4 + facet_grid(ScanFY ~.)
+
+png(paste0("output/Reach", StudyReach, "YALPlot4.png"), width = 6, height = 4, units = 'in', res = 300)   
+ReachYALPlot4
+dev.off()
+
+packages(openxlsx) # package openxlsx is required
+
+wb <- createWorkbook() # creates object to hold workbook sheets
+addWorksheet(wb, "AgeStructure") # add worksheet
+addWorksheet(wb, "ReleaseCohorts") # add worksheet
+
+writeData(wb, "AgeStructure", ReachYALPlotData) # write dataframe (second argument) to worksheet
+writeData(wb, "ReleaseCohorts", ReachReleaseSizes) # write dataframe (second argument) to worksheet
+
+
+# Last step is to save workbook. Give a useful name.  Adding date time ensures this step
+# will not overwrite a previous version.  Location should be output folder
+saveWorkbook(wb, paste0("output/Reach",StudyReach, "AgeAnalysis",
+                        format(Sys.time(), "%Y%m%d"), ".xlsx"),
+             overwrite = TRUE)
