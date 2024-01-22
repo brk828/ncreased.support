@@ -161,7 +161,7 @@ wb <- createWorkbook() # creates object to hold workbook sheets
 addWorksheet(wb, "AgeStructure") # add worksheet
 addWorksheet(wb, "ReleaseCohorts") # add worksheet
 
-writeData(wb, "AgeStructure", ReachYALPlotData) # write dataframe (second argument) to worksheet
+writeData(wb, "AgeStructure", ReachYALPlotData %>% select(-Contacts)) # write dataframe (second argument) to worksheet
 writeData(wb, "ReleaseCohorts", ReachReleaseSizes) # write dataframe (second argument) to worksheet
 
 

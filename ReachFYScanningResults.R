@@ -4,8 +4,9 @@
 
 # Assign Study Reach
 StudyReach = 3
-StartDate = "2021-10-01"
-EndDate = "2023-05-31"
+StartDate = "2012-01-01"
+EndDate = "2023-12-31"
+Sp = "CALA"
 
 source("LabFunctions.R")
 packages(dplyr)
@@ -149,7 +150,7 @@ ReachContacts <- ReachContacts %>%
   inner_join(BasinPITIndex %>%
                select(Species, ReleaseTL, Sex, PIT, PITIndex, ReleaseDate, ReleaseLocation, 
                       ReleaseReach = Reach, ReleaseZone, FirstCensus), 
-             by = "PIT")
+             by = "PIT") %>% filter(Species == Sp)
 
 ReachContactsNoMark <- ReachContacts %>% filter(is.na(Species))
 
@@ -249,6 +250,6 @@ writeData(wb, "PopulationEstimates", Estimates) # write dataframe
 
 # Last step is to save workbook. Give a useful name.  Adding date time ensures this step
 # will not overwrite a previous version.  Location should be output folder
-saveWorkbook(wb, paste0("output/Reach",StudyReach, "Data",
+saveWorkbook(wb, paste0("output/Reach",StudyReach, "Scans",
                         format(Sys.time(), "%Y%m%d"), ".xlsx"),
              overwrite = TRUE)
