@@ -7,9 +7,13 @@ editor: source
 ---
 ```{r}
 #| warning: false
-# Change StudyReach value to Reach of interest.
+# Set StudyReach value to Reach of interest.
 StudyReach = 3
-# First year with reach wide PIT scanning
+
+# Set study species
+StudySpecies = "XYTE"
+
+# Set year with reach wide PIT scanning
 FirstScanFY = 2015
 source("AgeStructure.R")
 ```

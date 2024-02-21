@@ -7,8 +7,9 @@ if(exists("StudyReach") == FALSE) {StudyReach = 3}
 # Assign first scanning FY if not established 
 if(exists("FirstScanFY") == FALSE) {FirstScanFY = 2015}
 
+if(exists("StudySpecies") == FALSE) {StudySpecies = "XYTE"}
+
 TLCMCut = 40 # cutoff for release size classes
-StudySpecies = "XYTE"
 MinimumContacts = 200 # cutoff of total unique contacts per zone for inclusion in analysis
 
 source("LabFunctions.R")
@@ -55,7 +56,7 @@ rm(BasinReleases)
 
 SizePlot <- ggplot(ReachReleaseSizes, aes(ReleaseFY)) + 
   geom_bar(aes(fill = Size), colour="black") +
-  scale_x_continuous(limits = c(2007, CurrentFY-1), breaks = seq(2008, CurrentFY-1, 2)) +
+  scale_x_reverse(limits = c(CurrentFY-2, 2007), breaks = seq(CurrentFY-2, 2008, -2)) +
   scale_y_continuous(limits = c(0, 10000)) +
   scale_fill_manual(values = c('#FFFFFF','#000011')) +
   labs(x = "Release FY", y = "Number of Fish Released") +

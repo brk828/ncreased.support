@@ -4,9 +4,9 @@
 
 # Assign Study Reach
 StudyReach = 3
-StartDate = "2012-01-01"
+StartDate = "2010-01-01"
 EndDate = "2023-12-31"
-Sp = "CALA"
+Sp = "XYTE"
 source("LabFunctions.R")
 
 packages(dplyr)
@@ -42,14 +42,14 @@ ReachCaptures <- NFWGTable %>% filter(Status == "Capture",
                                       CollectionDate >= as.Date(StartDate), 
                                       CollectionDate <= as.Date(EndDate)) %>%
   select(Species, CollectionDate, DecimalZone, Location, Latitude, Longitude,
-         FirstPIT, First134PIT, Collector, Method) %>%
+         ReservoirKm, FirstPIT, First134PIT, Collector, Method) %>%
   arrange(CollectionDate)
 
 ReachReleases <- NFWGTable %>% filter(Status == "Release", 
                                       Reach == StudyReach, 
                                       Species == Sp) %>%
   select(Species, CollectionDate, DecimalZone, Location, Latitude, Longitude,
-         FirstPIT, First134PIT, Collector, Method)
+         ReservoirKm, FirstPIT, First134PIT, Collector, Method)
 
 packages(openxlsx) # package openxlsx is required
 wb <- createWorkbook() # creates object to hold workbook sheets
@@ -61,6 +61,6 @@ writeData(wb, "ReachReleases", ReachReleases) # write dataframe (second argument
 
 # Last step is to save workbook. Give a useful name.  Adding date time ensures this step
 # will not overwrite a previous version.  Location should be output folder
-saveWorkbook(wb, paste0("output/Reach",StudyReach, "Captures",
+saveWorkbook(wb, paste0("output/Reach",StudyReach, Sp, "HandlingRecords",
                         format(Sys.time(), "%Y%m%d"), ".xlsx"),
              overwrite = TRUE)

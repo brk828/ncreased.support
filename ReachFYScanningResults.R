@@ -2,11 +2,15 @@
 # Script to produce Reach and zone population estimates based on PIT scanning
 # Load useful lab functions
 
-# Assign Study Reach
-StudyReach = 3
-StartDate = "2012-01-01"
-EndDate = "2023-12-31"
-Sp = "CALA"
+# Request Study Reach
+StudyReach <- as.integer(readline(prompt="Study Reach (1 through 4): "))
+
+# Request Species
+Sp <- readline(prompt="Species (XYTE, GIEL, or CALA: ")
+
+#Request Start and End Dates of trip
+StartDate <- as.Date(readline(prompt="TripStart (format YYYY-MM-DD): "))
+EndDate <- as.Date(readline(prompt="TripEnd (format YYYY-MM-DD): "))
 
 source("LabFunctions.R")
 packages(dplyr)
