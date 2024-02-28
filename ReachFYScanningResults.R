@@ -6,7 +6,7 @@
 StudyReach <- as.integer(readline(prompt="Study Reach (1 through 4): "))
 
 # Request Species
-Sp <- readline(prompt="Species (XYTE, GIEL, or CALA: ")
+#Sp <- readline(prompt="Species (XYTE, GIEL, or CALA: ")
 
 #Request Start and End Dates of trip
 StartDate <- as.Date(readline(prompt="TripStart (format YYYY-MM-DD): "))
@@ -51,7 +51,7 @@ ReachReleases <- BasinReleases %>% filter(Reach == StudyReach)
 rm(BasinReleases)
 
 ReachEffort <- BasinEffort %>% filter(Reach == StudyReach) %>%
-  filter(Retrieve >= as.Date(StartDate), Retrieve <= as.Date(EndDate))
+  filter(Retrieve >= as.Date(StartDate), Deploy <= as.Date(EndDate))
 
 ContactsWithoutEffort <- ReachContacts %>% anti_join(ReachEffort, by = "EID")
 
@@ -112,10 +112,7 @@ ReachScanBadTimeCPE <- ReachEffort %>%
 ReachScanBadTimePop <- ReachEffort %>% 
   select(TripID, EID, Deploy, Retrieve, Issue, Comments, Crew, Location, ScanTimeHrs) %>%
   left_join(ReachContacts %>% select(EID, PIT, DateTime), by = "EID") %>%
-  filter(DateTime < Deploy - days(120) | DateTime > Retrieve + days(120)) %>% 
-  group_by(TripID, EID, Deploy, Retrieve, Issue, Comments, Crew, Location, ScanTimeHrs) %>%
-  summarise(LateScan = max(DateTime), EarlyScan = min(DateTime)) %>%
-  ungroup()
+  filter(DateTime < Deploy - days(120) | DateTime > Retrieve + days(120)) 
 
 if(nrow(ReachScanBadTimePop)==0) {remove(ReachScanBadTimePop)
 } else {
@@ -151,10 +148,10 @@ if(nrow(MixedReach)==0) {remove(MixedReach)
 
 ReachContacts <- ReachContacts %>%
   select(-PITMFG, -PITPrefix, -DateTime, -Time) %>%
-  inner_join(BasinPITIndex %>%
+  left_join(BasinPITIndex %>%
                select(Species, ReleaseTL, Sex, PIT, PITIndex, ReleaseDate, ReleaseLocation, 
                       ReleaseReach = Reach, ReleaseZone, FirstCensus), 
-             by = "PIT") %>% filter(Species == Sp)
+             by = "PIT")
 
 ReachContactsNoMark <- ReachContacts %>% filter(is.na(Species))
 
