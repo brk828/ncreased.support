@@ -8,6 +8,7 @@ source("LabFunctions.R")
 packages(dplyr)
 packages(lubridate)
 packages(zoo)
+packages(tidyr)
 
 # remove unnecessary functions
 rm(euclid, split_hourly, download_nfwg, download_backwater)

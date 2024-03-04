@@ -113,29 +113,31 @@ DALModel <- glmmTMB(Alive ~ ReleaseTL + Season + ReleaseYear * Reach,
                      data = SpeciesSurvival)
 
 #creating a predictions data.frame from model for graphing
-Predictions <- expand.grid(ReleaseTL = as.integer(seq(300, 600, by = 10)), 
+Predictors <- expand.grid(ReleaseTL = as.integer(seq(300, 600, by = 10)), 
                            ReleaseYear = as.factor(MinReleaseYear:(CurrentYear-2)),
                            Season = c("Winter", "Early Spring", "Late Spring"),
                            Reach = as.factor(2:4))
                            
-Predictors <- predict(DALModel, newdata = Predictions, type = "response", se.fit = TRUE)
-lowerCI <- Predictors$fit - (1.96 * Predictors$se.fit)
-upperCI <- Predictors$fit + (1.96 * Predictors$se.fit)
-Predicted <- cbind(Predictions, Predictors, lowerCI, upperCI)
+Predictions <- predict(DALModel, newdata = Predictors, type = "response", se.fit = TRUE)
+lowerCI <- Predictions$fit - (1.96 * Predictions$se.fit)
+upperCI <- Predictions$fit + (1.96 * Predictions$se.fit)
+fit <- Predictions$fit
+Predicted <- cbind(Predictors, fit, lowerCI, upperCI)
 
-ReachPredicted <- Predicted %>% filter(Reach == 2)
-ReachReal <- SpeciesSurvivalSummary %>% filter(Reach == 2)
-
-DALGraph <- ggplot(ReachPredicted, aes(x = ReleaseTL, y = fit, color = Season)) + 
+DALGraphR2 <- ggplot(Predicted %>%
+                       filter(Reach == 2), 
+                     aes(x = ReleaseTL, y = fit, color = Season)) + 
   geom_line(linewidth = 1) + 
  labs(x = 'Total Length (mm)', y = 'Detection Probability', color = 'Season') + 
  theme(plot.margin = margin(.75,.75,.75,.75, unit = 'cm'), 
      axis.title.x = element_text(vjust = -2), axis.title.y = element_text(vjust = 5)) +
  geom_ribbon(aes(x = ReleaseTL, ymin = lowerCI, ymax = upperCI, fill = Season), alpha = 0.3) + 
   facet_wrap(~ReleaseYear, nrow=3) +
-  geom_point(data = ReachReal, aes(x = TLClass, y = AliveProp))
+  geom_point(data = SpeciesSurvivalSummary %>%
+               filter(Reach == 2), 
+             aes(x = TLClass, y = AliveProp))
 
-DALGraph
+DALGraphR2
 
 Survived <- SpeciesSurvival %>% 
   filter(Alive == 1)
