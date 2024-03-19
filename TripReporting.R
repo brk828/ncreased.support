@@ -39,7 +39,8 @@ rm(TripTable)
 TripContacts <- BasinContacts %>%
   inner_join(ReachTrips %>% select(TID), by = c("TripID" = "TID")) %>%
   left_join(BasinPITIndex %>% 
-              select(PIT, PITIndex, Species, Sex, DateVerified), 
+              select(PIT, PITIndex, Species, Sex, DateVerified,
+                     ReleaseDate, ReleaseLocation), 
             by = c("PIT" = "PIT")) %>%
   group_by(Species, TripID, Location, PITIndex, PIT, DateVerified) %>%
   summarise(Contacts=n()) %>%

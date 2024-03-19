@@ -20,8 +20,13 @@ get_polygon <- function(lat, lon) {
 RiverLocations <- st_read("LocationShapeFiles/location_polygons.shp")
 RiverLocations <-st_transform(RiverLocations, "+proj=longlat +datum=WGS84")
 
-RiverLocations$Label <- paste(RiverLocations$LOCATION, "-",
+RiverLocations$Label <- paste0(RiverLocations$LOCATION, " (",  RiverLocations$DECIMAL_ZO,
+                              ") - ",
                               RiverLocations$LOCATION_I)
+
+# Define a color palette (you can customize this)
+ZoneColors <- colorFactor(palette = "Set3", 
+                          domain = RiverLocations$DECIMAL_ZO)
 
 Centroid <- st_centroid(RiverLocations) %>%
   dplyr::mutate(Lon = sf::st_coordinates(.)[,1],
@@ -66,8 +71,9 @@ server <- function(input, output) {
     # Add a basemap from OpenStreetMap
     addProviderTiles("OpenStreetMap") %>%
     # Add RiverLocations layer
-    addPolygons(data = RiverLocations, 
-                fillOpacity = 0.3,
+    addPolygons(data = RiverLocations, fillColor = ~ZoneColors(DECIMAL_ZO),
+                fillOpacity = 0.5,  
+                color = ~ZoneColors(DECIMAL_ZO),
                 highlight = highlightOptions(
                   weight = 3,
                   fillOpacity = 0.7,
