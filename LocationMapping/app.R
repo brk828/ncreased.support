@@ -44,9 +44,13 @@ ui <- fluidPage(
       tags$form(
         numericInput("lat", "Latitude", value = 35.4762), 
         numericInput("lon", "Longitude", value = -114.6619),
-        submitButton("Map Point", icon("map-marker"))
+        submitButton("Submit", icon("map-marker"))
       ),
-      verbatimTextOutput("polygon_name")
+      verbatimTextOutput("polygon_name"),
+      radioButtons("basemap", "Change Basemap (must hit Submit):",
+                   choices = c("Esri World Imagery" = "Esri.WorldImagery",
+                               "Open Street Map" = "OpenStreetMap.Mapnik"),
+                   selected = "Esri.WorldImagery")
     ),
     
     # Main panel for displaying outputs
@@ -66,30 +70,34 @@ server <- function(input, output) {
     c(input$lon, input$lat)
   })
   
+  basemap <- reactive({
+    input$basemap
+  })
+  
   # Create a map widget
-  map <- leaflet() %>%
-    # Add a basemap from OpenStreetMap
-    addProviderTiles("OpenStreetMap") %>%
-    # Add RiverLocations layer
-    addPolygons(data = RiverLocations, fillColor = ~ZoneColors(DECIMAL_ZO),
-                fillOpacity = 0.5,  
-                color = ~ZoneColors(DECIMAL_ZO),
-                highlight = highlightOptions(
-                  weight = 3,
-                  fillOpacity = 0.7,
-                  opacity = 1.0,
-                  bringToFront = TRUE,
-                  sendToBack = TRUE),  
-                label = RiverLocations$Label,
-                labelOptions = labelOptions(
-                  style = list("font-weight" = "normal", padding = "3px 8px"),
-                  textsize = "15px",
-                  direction = "auto")) %>%
-    setView(lng = -114.65694, lat = 35.41765, zoom = 10) 
+  map <- leaflet() 
   
  #  Render the map in the output container
   output$map <- renderLeaflet({
-    map
+    leaflet() %>%
+      # Add a basemap from OpenStreetMap
+      addProviderTiles(basemap()) %>%
+      # Add RiverLocations layer
+      addPolygons(data = RiverLocations, fillColor = ~ZoneColors(DECIMAL_ZO),
+                  fillOpacity = 0.5,  
+                  color = ~ZoneColors(DECIMAL_ZO),
+                  highlight = highlightOptions(
+                    weight = 3,
+                    fillOpacity = 0.7,
+                    opacity = 1.0,
+                    bringToFront = TRUE,
+                    sendToBack = TRUE),  
+                  label = RiverLocations$Label,
+                  labelOptions = labelOptions(
+                    style = list("font-weight" = "normal", padding = "3px 8px"),
+                    textsize = "15px",
+                    direction = "auto")) %>%
+      setView(lng = -114.65694, lat = 35.41765, zoom = 10) 
   })
   
   # Update the map when the user clicks the submit button
