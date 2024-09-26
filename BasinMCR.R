@@ -39,7 +39,7 @@ SpReleases <- BasinReleases %>%
   filter(Species == Sp, 
          ReleaseYear > 2012,
          ReleaseYear < year(Sys.Date()) - 2,
-         Reach == 2|Reach == 3) 
+         Reach == 2) 
 # rm(BasinReleases)
 
 SpContacts <- BasinContacts %>% 
@@ -112,7 +112,7 @@ mark(data=dp,ddl=ddl,model.parameters=list(Phi=Phi.age2,p=p.time2))
 
 # Quick run
 #cjs_model <- crm(data = Spch, formula = list(phi = ~ AGE, p = ~ .),
-#  maxage = 4)
+# maxage = 4)
 
 #SpProcessed <- process.data(Spch)
 
@@ -120,14 +120,14 @@ mark(data=dp,ddl=ddl,model.parameters=list(Phi=Phi.age2,p=p.time2))
 
 #Phi.fixed <- list(formula=~.)
 
-Phi.age <- list(formula=~age)
-p.fixed <- list(formula=~.)
+#Phi.age <- list(formula=~age)
+#p.fixed <- list(formula=~.)
 
-CJSModel <- crm(SpProcessed, SpDesign,
-                model.parameters = list(Phi = Phi.age,
-                                        p = p.fixed),
-                time.intervals = TimeIntervals)
+#CJSModel <- crm(SpProcessed, SpDesign,
+ #               model.parameters = list(Phi = Phi.age,
+ #                                       p = p.fixed),
+ #               time.intervals = TimeIntervals)
 
-predict(CJSModel)
+#predict(CJSModel)
 
 
