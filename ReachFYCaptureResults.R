@@ -3,9 +3,9 @@
 # Load useful lab functions
 
 # Assign Study Reach
-StudyReach = 3
-StartDate = "2023-01-01"
-EndDate = "2024-04-30"
+StudyReach = 2
+StartDate = "2024-01-01"
+EndDate = "2025-04-30"
 source("LabFunctions.R")
 
 packages(dplyr)
