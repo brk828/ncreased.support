@@ -1,0 +1,8 @@
+INSERT INTO scan_data_no_effort SELECT sd.* 
+FROM scan_data sd LEFT JOIN (SELECT DISTINCT EID FROM scan_effort) se 
+ON sd.effort_ID = se.EID WHERE se.EID IS NULL;
+
+DELETE sd
+FROM scan_data sd
+LEFT JOIN (SELECT EID FROM scan_effort) se ON sd.effort_ID = se.EID
+WHERE se.EID IS NULL;
