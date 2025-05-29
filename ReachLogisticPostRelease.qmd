@@ -1,5 +1,5 @@
 ---
-title: "Logistic Regression of Post-Release Contact Rates of Razorback Sucker"
+title: "Post-Release Contact Rates of Razorback Sucker"
 author: "B. Kesner And C. Ehlo"
 format: html
 echo: false
