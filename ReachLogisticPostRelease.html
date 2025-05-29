@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="B. Kesner">
+<meta name="author" content="B. Kesner And C. Ehlo">
 
-<title>AgeStructure</title>
+<title>Logistic Regression of Post-Release Contact Rates of Razorback Sucker</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,16 +24,16 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="AgeStructure_files/libs/clipboard/clipboard.min.js"></script>
-<script src="AgeStructure_files/libs/quarto-html/quarto.js"></script>
-<script src="AgeStructure_files/libs/quarto-html/popper.min.js"></script>
-<script src="AgeStructure_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="AgeStructure_files/libs/quarto-html/anchor.min.js"></script>
-<link href="AgeStructure_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="AgeStructure_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="AgeStructure_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="AgeStructure_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="AgeStructure_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="ReachLogisticPostRelease_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ReachLogisticPostRelease_files/libs/quarto-html/quarto.js"></script>
+<script src="ReachLogisticPostRelease_files/libs/quarto-html/popper.min.js"></script>
+<script src="ReachLogisticPostRelease_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ReachLogisticPostRelease_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ReachLogisticPostRelease_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ReachLogisticPostRelease_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ReachLogisticPostRelease_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ReachLogisticPostRelease_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ReachLogisticPostRelease_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -46,7 +46,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">AgeStructure</h1>
+<h1 class="title">Logistic Regression of Post-Release Contact Rates of Razorback Sucker</h1>
 </div>
 
 
@@ -56,7 +56,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>B. Kesner </p>
+             <p>B. Kesner And C. Ehlo </p>
           </div>
   </div>
     
@@ -71,23 +71,22 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="methodology" class="level2">
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
-<p>An age structure analysis was developed based on PIT scanning for zones within a reach that had at least 200 unique fish contacted. The age structure was developed for each fiscal year (FY; October through September) from 2015 to 2024. Age was based on years at large (YAL; the number of years post-stocking), because actual age for most fish released was unknown due to mixing of year classes in hatcheries.</p>
-<p>The YAL for a given fish was calculated by subtracting one from the number of years between the release year (FY) and the scan year (FY). The calculated YAL for each fish was therefore the whole number of years a fish was at large just prior to the start of each scanning FY. For example, a fish released in FY 2020 and scanned in FY 2021 could have been at large for as little as one day (released September 30, 2020, the last day of FY 2020) up to one year (released October 1, 2019) at the beginning of FY 2021 and would have a calculated YAL age of zero.</p>
-<p>Fish included in the analysis for each scan year must have been at large for more than one year; calculated YAL equal to or greater than one. YAL was calculated for all fish repatriated to MSCP Reach 2 with a TL measurement and PIT scanned. Age structure was examined using stacked bar charts produced separately by zone and scan year, each stack color coded by zone of release. To maintain a consistent x-axis range between figures, all fish 25 YAL and older were given the age of 25 YAL (max age was 25 YAL).</p>
-<p>TL at release is known to significantly impact post-release survival (Marsh et al.&nbsp;2005). To illustrate the impact of release size distribution on age structure, release cohorts for each zone and year were summarized in bar charts with release numbers divided between two size classes: shorter than 400 mm TL, and equal to or longer than 400 mm TL. This size class cutoff was smaller than the TL generally considered as a safe target size for release; 500 mm TL (Wisenall et al.&nbsp;2015). However, a longer size cutoff resulted in many years with no fish released in the larger size class. The size cutoff was reduced to increase the number of sample cohorts available for analysis.</p>
+<p>A post-release contact analysis was developed based on PIT scanning for release year, season and MSCP reach of release. The relationship of TL at release and contact probability was modeled using zero inflated logistic regression. Release records for razorback sucker with a TL at release were utilized for this analysis. The resultant probabilities are a combination of survival and detectability and are expected to be used as a relative comparison of the survival relationship among seasons and release years, and across reaches. The analysis is restricted to fish released on or after FY 2015.</p>
+<p>Seasons were based on patterns of stocking and spawning behavior not traditional seasons. Early Spring was February through March (peak spawning season), Late Spring was April through May (post-spawning), Summer-Fall was June through October (hot months with few stockings), and Winter (November through January). These seasons can be adjusted in the ReachLogisticPostRelease.R script. Summer-Fall was removed from the model due to lack of consistent release records.</p>
+<p>For each MSCP Reach with significant razorback sucker stockings (Reaches 2 through 4), a post-release contact probability relationship is calculated and graphed. Release cohorts (same release reach, year, season, and TL bin [10 mm]) are also summarized and their post-release contact proportion is plotted on the same graph for comparison. Size histograms for each season and reach are also plotted for fish contacted and not contacted. The logistic model is a zero inflated model with the overall structure of Contacted ~ ReleaseTL * Season + ReleaseYear * Reach.</p>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>The age structure for zone 2.1 is shown in <a href="#fig-FirstZoneYAL1" class="quarto-xref">Figure&nbsp;1</a> and <a href="#fig-FirstZoneYAL2" class="quarto-xref">Figure&nbsp;2</a>.</p>
+<p>The relationship of post-release contacts and TL at release among seasons and release year are shown for Reach 2 <a href="#fig-DALReach2" class="quarto-xref">Figure&nbsp;1</a>, Reach 3 <a href="#fig-DALReach3" class="quarto-xref">Figure&nbsp;2</a>, and Reach 4 <a href="#fig-DALReach4" class="quarto-xref">Figure&nbsp;3</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-FirstZoneYAL1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-DALReach2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-FirstZoneYAL1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="AgeStructure_files/figure-html/fig-FirstZoneYAL1-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-DALReach2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ReachLogisticPostRelease_files/figure-html/fig-DALReach2-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FirstZoneYAL1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Age structure based on years-at-large, part 1.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-DALReach2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Post-release contact probability Reach 2.
 </figcaption>
 </figure>
 </div>
@@ -95,28 +94,13 @@ Figure&nbsp;1: Age structure based on years-at-large, part 1.
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-FirstZoneYAL2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-DALReach3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-FirstZoneYAL2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="AgeStructure_files/figure-html/fig-FirstZoneYAL2-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-DALReach3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ReachLogisticPostRelease_files/figure-html/fig-DALReach3-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FirstZoneYAL2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Age structure based on years-at-large, part 2.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>The age structure for zone 2.3 is shown in <a href="#fig-FirstZoneYAL3" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-FirstZoneYAL4" class="quarto-xref">Figure&nbsp;4</a>.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-FirstZoneYAL3" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-FirstZoneYAL3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="AgeStructure_files/figure-html/fig-FirstZoneYAL3-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FirstZoneYAL3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Age structure based on years-at-large, part 2.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-DALReach3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Post-release contact probability Reach 3.
 </figcaption>
 </figure>
 </div>
@@ -124,28 +108,56 @@ Figure&nbsp;3: Age structure based on years-at-large, part 2.
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-FirstZoneYAL4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-DALReach4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-FirstZoneYAL4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="AgeStructure_files/figure-html/fig-FirstZoneYAL4-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-DALReach4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ReachLogisticPostRelease_files/figure-html/fig-DALReach4-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FirstZoneYAL4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Age structure based on years-at-large, part 2.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-DALReach4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Post-release contact probability Reach 4.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The release size plot for all zones within the reach is shown in <a href="#fig-ReleaseSize" class="quarto-xref">Figure&nbsp;5</a>.</p>
+<p>The size distribution of razorback sucker contacted (blue) or not contacted (grey) post-release among different seasons shown for Reach 2 <a href="#fig-Hist2" class="quarto-xref">Figure&nbsp;4</a>, Reach 3 <a href="#fig-Hist3" class="quarto-xref">Figure&nbsp;5</a>, and Reach 4 <a href="#fig-Hist4" class="quarto-xref">Figure&nbsp;6</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-ReleaseSize" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-Hist2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-ReleaseSize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="AgeStructure_files/figure-html/fig-ReleaseSize-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-Hist2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ReachLogisticPostRelease_files/figure-html/fig-Hist2-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ReleaseSize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: FY Release cohorts and their release size class (shorter than 400 mm TL or 400 mm TL and longer).
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-Hist2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Release size (TL in mm) of razorback sucker contacted (blue) and not contacted (grey) post-release in Reach 2.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-Hist3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-Hist3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ReachLogisticPostRelease_files/figure-html/fig-Hist3-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-Hist3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Release size (TL in mm) of razorback sucker contacted (blue) and not contacted (grey) post-release in Reach 3.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-Hist4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-Hist4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ReachLogisticPostRelease_files/figure-html/fig-Hist4-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-Hist4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Release size (TL in mm) of razorback sucker contacted (blue) and not contacted (grey) post-release in Reach 4.
 </figcaption>
 </figure>
 </div>

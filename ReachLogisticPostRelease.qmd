@@ -1,0 +1,78 @@
+---
+title: "Logistic Regression of Post-Release Contact Rates of Razorback Sucker"
+author: "B. Kesner And C. Ehlo"
+format: html
+echo: false
+editor: source
+---
+
+```{r}
+#| warning: false
+
+
+MinReleaseYear = 2015 # Limit to fish release on or after this year
+
+source("ReachLogisticPostRelease.R")
+```
+
+## Methodology
+
+A post-release contact analysis was developed based on PIT scanning for release year, season and MSCP reach of release. The relationship of TL at release and contact probability was modeled using zero inflated logistic regression. Release records for razorback sucker with a TL at release were utilized for this analysis. The resultant probabilities are a combination of survival and detectability and are expected to be used as a relative comparison of the survival relationship among seasons and release years, and across reaches. The analysis is restricted to fish released on or after FY `r MinReleaseYear`.
+
+Seasons were based on patterns of stocking and spawning behavior not traditional seasons. Early Spring was February through March (peak spawning season), Late Spring was April through May (post-spawning), Summer-Fall was June through October (hot months with few stockings), and Winter (November through January). These seasons can be adjusted in the ReachLogisticPostRelease.R script. Summer-Fall was removed from the model due to lack of consistent release records.
+
+For each MSCP Reach with significant razorback sucker stockings (Reaches 2 through 4), a post-release contact probability relationship is calculated and graphed. Release cohorts (same release reach, year, season, and TL bin \[10 mm\]) are also summarized and their post-release contact proportion is plotted on the same graph for comparison. Size histograms for each season and reach are also plotted for fish contacted and not contacted. The logistic model is a zero inflated model with the overall structure of Contacted ~ ReleaseTL * Season + ReleaseYear * Reach. 
+
+## Results
+
+The relationship of post-release contacts and TL at release among seasons and release year are shown for Reach 2 @fig-DALReach2, Reach 3 @fig-DALReach3, and Reach 4 @fig-DALReach4.
+
+```{r}
+#| label: fig-DALReach2
+#| fig-cap: "Post-release contact probability Reach 2."
+#| warning: false
+DALGraphR2
+
+```
+
+```{r}
+#| label: fig-DALReach3
+#| fig-cap: "Post-release contact probability Reach 3."
+#| warning: false
+DALGraphR3
+
+```
+
+```{r}
+#| label: fig-DALReach4
+#| fig-cap: "Post-release contact probability Reach 4."
+#| warning: false
+DALGraphR4
+
+```
+
+The size distribution of razorback sucker contacted (blue) or not contacted (grey) post-release among different seasons shown for Reach 2 @fig-Hist2, Reach 3 @fig-Hist3, and Reach 4 @fig-Hist4.
+
+```{r}
+#| label: fig-Hist2
+#| fig-cap: "Release size (TL in mm) of razorback sucker contacted (blue) and not contacted (grey) post-release in Reach 2."
+#| warning: false
+HistReach2
+
+```
+
+```{r}
+#| label: fig-Hist3
+#| fig-cap: "Release size (TL in mm) of razorback sucker contacted (blue) and not contacted (grey) post-release in Reach 3."
+#| warning: false
+HistReach3
+
+```
+
+```{r}
+#| label: fig-Hist4
+#| fig-cap: "Release size (TL in mm) of razorback sucker contacted (blue) and not contacted (grey) post-release in Reach 4."
+#| warning: false
+HistReach4
+
+```

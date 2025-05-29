@@ -241,6 +241,7 @@ packages(googlesheets4)
 # If Google sheet access has not previously been established on current computer
 # the first time the following line is run it will require Google Authentication
 # After initial run, a login token will be stored in the dependencies folder
+# If re-authorization is required, delete the cache file in dependencies subfolder and rerun gs4_auth
 gs4_auth(cache = "dependencies", email = "brk828@gmail.com")
 
 # Create a new sheet with the following line, update as needed.  

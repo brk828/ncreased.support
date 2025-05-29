@@ -18,7 +18,10 @@ AdultTL <- 380 #cutoff for juveniles/adults not used in graphs yet
 SurvivalDAL <- 180 #Day cutoff for post-stocking survival
 ContactLimit <- 10000 # contact cutoff to remove likely dead tags
 Sp <- "XYTE" # Species of interest GIEL bonytail, XYTE razorback
-MinReleaseYear <- 2013 # Limit to fish release on or after this year
+if (!exists("MinReleaseYear")) {
+  MinReleaseYear <- 2015
+}
+# Limit to fish release on or after this year
 EarlySpringStartMonth <- 2 # Start of Early Spring month number (2 = February)
 LateSpringStartMonth <- 4 # Start of Late Spring
 SummerStartMonth <- 6 # Start of Summer/Fall usually few fish are released
@@ -93,22 +96,22 @@ SpeciesSurvival <- SpReachReleases %>%
   select(ReleaseMonth, Reach, ReleaseYear, Season, SizeClass, PITIndex, ReleaseTL, TLCM) %>%
   left_join(SpReachContacts %>% select(Reach, MaxDAL, Contacts, PITIndex), 
             by = c("Reach" = "Reach","PITIndex" = "PITIndex")) %>% 
-  filter(Contacts < ContactLimit| is.na(Contacts)) %>%
+  filter(Contacts < ContactLimit| is.na(Contacts), Season != "Summer-Fall") %>%
   mutate(MaxDAL = if_else(MaxDAL<0|is.na(MaxDAL),0,MaxDAL), 
          Contacts = if_else(is.na(Contacts), 0, Contacts),
-         Alive = if_else(MaxDAL>=SurvivalDAL, 1, 0),
+         Contacted = if_else(MaxDAL>=SurvivalDAL, 1, 0),
          ReleaseYear = as.factor(ReleaseYear),
          Reach = as.factor(Reach), 
          TLClass = TLCM*10)
 
 SpeciesSurvivalSummary <- SpeciesSurvival %>% 
   group_by(Reach, ReleaseYear, Season, TLClass) %>%
-  summarise(Released = n(), Survivors = sum(Alive), AliveProp = Survivors/Released) %>%
+  summarise(Released = n(), Survivors = sum(Contacted), ContactedProp = Survivors/Released) %>%
   ungroup() %>%
   filter(Released > 20, TLClass >= 300)
   
 #zero inflated model by DAL and Season.  Could cluster by Zone and also add size at release
-DALModel <- glmmTMB(Alive ~ ReleaseTL + Season + ReleaseYear * Reach,
+DALModel <- glmmTMB(Contacted ~ ReleaseTL * Season + ReleaseYear * Reach,
                      family = binomial(link = 'logit'), 
                      data = SpeciesSurvival)
 
@@ -135,15 +138,63 @@ DALGraphR2 <- ggplot(Predicted %>%
   facet_wrap(~ReleaseYear, nrow=3) +
   geom_point(data = SpeciesSurvivalSummary %>%
                filter(Reach == 2), 
-             aes(x = TLClass, y = AliveProp))
+             aes(x = TLClass, y = ContactedProp))
 
-DALGraphR2
 
-Survived <- SpeciesSurvival %>% 
-  filter(Alive == 1)
+HistReach2 <- ggplot(SpeciesSurvival %>%
+                       filter(Reach == 2), 
+                     aes(x = ReleaseTL, fill = factor(Contacted))) + 
+  geom_histogram(position = "identity", alpha = 0.5, bins = 30) + 
+  facet_wrap(~ Season) + 
+  scale_fill_manual(values = c("0" = "grey", "1" = "blue"),
+                    labels = c("Not Contacted", "Contacted")) +
+  labs(fill = "Contact Status") +  # Removes "factor(Contacted)" and replaces it
+  theme_minimal()
 
-hist <- ggplot(SpeciesSurvival, aes(x = ReleaseTL, fill = Alive)) + 
-  geom_histogram()  + facet_grid(Alive ~ Season)
-hist
+DALGraphR3 <- ggplot(Predicted %>%
+                       filter(Reach == 3), 
+                     aes(x = ReleaseTL, y = fit, color = Season)) + 
+  geom_line(linewidth = 1) + 
+  labs(x = 'Total Length (mm)', y = 'Detection Probability', color = 'Season') + 
+  theme(plot.margin = margin(.75,.75,.75,.75, unit = 'cm'), 
+        axis.title.x = element_text(vjust = -2), axis.title.y = element_text(vjust = 5)) +
+  geom_ribbon(aes(x = ReleaseTL, ymin = lowerCI, ymax = upperCI, fill = Season), alpha = 0.3) + 
+  facet_wrap(~ReleaseYear, nrow=3) +
+  geom_point(data = SpeciesSurvivalSummary %>%
+               filter(Reach == 2), 
+             aes(x = TLClass, y = ContactedProp))
 
+
+HistReach3 <- ggplot(SpeciesSurvival %>%
+                       filter(Reach == 3), 
+                     aes(x = ReleaseTL, fill = factor(Contacted))) + 
+  geom_histogram(position = "identity", alpha = 0.5, bins = 30) + 
+  facet_wrap(~ Season) + 
+  scale_fill_manual(values = c("0" = "grey", "1" = "blue"),
+                    labels = c("Not Contacted", "Contacted")) +
+  labs(fill = "Contact Status") +  # Removes "factor(Contacted)" and replaces it
+  theme_minimal()
+
+DALGraphR4 <- ggplot(Predicted %>%
+                       filter(Reach == 4), 
+                     aes(x = ReleaseTL, y = fit, color = Season)) + 
+  geom_line(linewidth = 1) + 
+  labs(x = 'Total Length (mm)', y = 'Detection Probability', color = 'Season') + 
+  theme(plot.margin = margin(.75,.75,.75,.75, unit = 'cm'), 
+        axis.title.x = element_text(vjust = -2), axis.title.y = element_text(vjust = 5)) +
+  geom_ribbon(aes(x = ReleaseTL, ymin = lowerCI, ymax = upperCI, fill = Season), alpha = 0.3) + 
+  facet_wrap(~ReleaseYear, nrow=3) +
+  geom_point(data = SpeciesSurvivalSummary %>%
+               filter(Reach == 2), 
+             aes(x = TLClass, y = ContactedProp))
+
+HistReach4 <- ggplot(SpeciesSurvival %>%
+                       filter(Reach == 4), 
+                     aes(x = ReleaseTL, fill = factor(Contacted))) + 
+  geom_histogram(position = "identity", alpha = 0.5, bins = 30) + 
+  facet_wrap(~ Season) + 
+  scale_fill_manual(values = c("0" = "grey", "1" = "blue"),
+                    labels = c("Not Contacted", "Contacted")) +
+  labs(fill = "Contact Status") +  # Removes "factor(Contacted)" and replaces it
+  theme_minimal()
 

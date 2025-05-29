@@ -17,6 +17,7 @@ packages(dplyr)
 packages(ggplot2)
 packages(lubridate)
 packages(lemon) # additional options for ggplot
+packages(stringr)
 
 CurrentFY <- if_else(month(Sys.Date())>9, year(Sys.Date())+1, year(Sys.Date()))
 TLCutoffText <- paste0(TLCMCut, "0")
@@ -77,7 +78,7 @@ ReachYAL <- BasinContacts %>%
              by = "PIT") %>%
   mutate(ReleaseAge = ScanFY - ReleaseFY - 1) %>% 
   filter(Species == StudySpecies, !is.na(ReleaseFY), 
-         ReleaseAge>0, ScanFY >= FirstScanFY) %>%
+         ReleaseAge>0, ScanFY >= FirstScanFY, str_starts(ReleaseZone, paste0(StudyReach, "."))) %>%
   dplyr::select(PITIndex, ScanFY, ReleaseFY, Sex, TLCM, ReleaseZone, 
                 ScanZone = DecimalZone, ReleaseAge) %>% 
   group_by(PITIndex, ScanFY, Sex, TLCM, ReleaseZone, ScanZone, ReleaseAge, ReleaseFY) %>%
@@ -90,6 +91,8 @@ Zones <- ReachYAL %>%
   group_by(ScanZone) %>%
   summarise(Count = n()) %>%
   filter(Count > MinimumContacts) 
+
+Zone2 <- ifelse(StudyReach == 2, Zones$ScanZone[3], Zones$ScanZone[2])
 
 ReachYALPlotData <- ReachYAL %>%
   inner_join(Zones %>% select(ScanZone), by = "ScanZone")
@@ -127,7 +130,7 @@ ReachYALPlot2
 dev.off()
 
 ReachYALPlot3 <- ggplot(ReachYALPlotData %>% 
-                         filter(ScanFY < YearSplit, ScanZone == Zones$ScanZone[2]), 
+                         filter(ScanFY < YearSplit, ScanZone == Zone2), 
                        aes(ReleaseAge)) +
   geom_bar(aes(fill = ReleaseZone), colour="black") +
   scale_x_continuous(limits = c(0, 26), breaks = seq(0, 25, 5)) +
@@ -142,7 +145,7 @@ ReachYALPlot3
 dev.off()
 
 ReachYALPlot4 <- ggplot(ReachYALPlotData %>% 
-                         filter(ScanFY >= YearSplit, ScanZone == Zones$ScanZone[2]), 
+                         filter(ScanFY >= YearSplit, ScanZone == Zone2), 
                        aes(ReleaseAge)) +
   geom_bar(aes(fill = ReleaseZone), colour="black") +
   scale_x_continuous(limits = c(0, 26), breaks = seq(0, 25, 5)) +

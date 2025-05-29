@@ -28,7 +28,7 @@ CurrentMonth <- month(Sys.Date())
 CurrentFY <- ifelse(CurrentMonth>9, year(Sys.Date())+1,year(Sys.Date()))
 
 # Set ReleaseFY cutoff, fish must be released before this Fiscal year
-CutoffFY <- 2011
+CutoffFY <- 2012
 
 # Going to look for fish released with a 134 kHz PIT tag, and have had that tag 
 # contacted in the most recent 2 years of PIT scanning.
