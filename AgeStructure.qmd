@@ -9,7 +9,7 @@ editor: source
 ```{r}
 #| warning: false
 # Set StudyReach value to Reach of interest.
-StudyReach = 3
+StudyReach = 2
 
 # Set study species
 StudySpecies = "XYTE"
@@ -35,7 +35,7 @@ The age structure for zone `r Zones$ScanZone[1]` is shown in @fig-FirstZoneYAL1 
 
 ```{r}
 #| label: fig-FirstZoneYAL1
-#| fig-cap: "Age structure based on years-at-large, part 1."
+#| fig-cap: "Age structure based on years-at-large based on PIT scanning during each fiscal year, (early years)"
 #| warning: false
 ReachYALPlot1 + facet_grid(ScanFY ~.)
 
@@ -43,7 +43,7 @@ ReachYALPlot1 + facet_grid(ScanFY ~.)
 
 ```{r}
 #| label: fig-FirstZoneYAL2
-#| fig-cap: "Age structure based on years-at-large, part 2."
+#| fig-cap: "Age structure based on years-at-large based on PIT scanning during each fiscal year, (recent years)."
 #| warning: false
 ReachYALPlot2 + facet_grid(ScanFY ~.)
 
@@ -53,14 +53,14 @@ The age structure for zone `r Zone2` is shown in @fig-FirstZoneYAL3 and @fig-Fir
 
 ```{r}
 #| label: fig-FirstZoneYAL3
-#| fig-cap: "Age structure based on years-at-large, part 2."
+#| fig-cap: "Age structure based on years-at-large based on PIT scanning during each fiscal year, (early years)"
 #| warning: false
 ReachYALPlot3 + facet_grid(ScanFY ~.)
 ```
 
 ```{r}
 #| label: fig-FirstZoneYAL4
-#| fig-cap: "Age structure based on years-at-large, part 2."
+#| fig-cap: "Age structure based on years-at-large based on PIT scanning during each fiscal year, (recent years)."
 #| warning: false
 ReachYALPlot4 + facet_grid(ScanFY ~.)
 ```
