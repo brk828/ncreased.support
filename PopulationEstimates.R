@@ -18,13 +18,22 @@ if(file.exists("data/BasinScanningIndex.RData")){
   if(data_date>Sys.Date() - 7){
     load("data/BasinScanningIndex.RData")
   } else {
-    download_basin("data")
+    download.file("https://ncreased.net/BasinScanningIndex.RData",
+                  "data/BasinScanningIndex.RData",cacheOK=TRUE, 
+                  extra = options(timeout = 600)) 
     load("data/BasinScanningIndex.RData")
   }
 } else {
-  download_basin("data")
+  download.file("https://ncreased.net/BasinScanningIndex.RData",
+                "data/BasinScanningIndex.RData",cacheOK=TRUE, 
+                extra = options(timeout = 600)) 
   load("data/BasinScanningIndex.RData")
 }
+
+download.file("https://ncreased.net/PITIndex.RData",
+              "data/PITIndex.RData",cacheOK=TRUE, 
+              extra = options(timeout = 600)) 
+load("data/PITIndex.RData")
 
 rm(download_basin, data_info, data_date, Unit, TripTable, ReachTable, BasinEffort)
 
@@ -32,10 +41,10 @@ BasinContacts <- BasinContacts %>% filter(SurfaceConnection!= "constrained")
 # Marks are restricted to January or February of the census year (month < 3)
 # The census year is equal to the year of scanning
 BasinMarksZone <- BasinContacts %>% 
-  select(Reach, DecimalZone, Date, PIT) %>%
+  select(Reach, DecimalZone, Date, PITIndex) %>%
   filter(month(Date) < 3) %>%
   mutate(CensusYear = year(Date)) %>%
-  group_by(CensusYear, Reach, DecimalZone, PIT) %>%
+  group_by(CensusYear, Reach, DecimalZone, PITIndex) %>%
   summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
   ungroup()
 
@@ -43,18 +52,21 @@ BasinMarksZone <- BasinContacts %>%
 # The census year is the year in which the October scanning begins but a year less
 # than scans for January through April, Fiscal Year is a year ahead of this schedule 
 BasinCapturesZone <- BasinContacts %>% 
-  select(Reach, DecimalZone, Date, PIT, ScanFY) %>%
+  select(Reach, DecimalZone, Date, PITIndex, ScanFY) %>%
   filter(month(Date) > 9| month(Date) < 5) %>%
   mutate(CensusYear = ScanFY - 1) %>%
-  group_by(CensusYear, Reach, DecimalZone, PIT) %>%
+  group_by(CensusYear, Reach, DecimalZone, PITIndex) %>%
   summarise(Contacts = n(), FirstScan = min(Date), LastScan = max(Date)) %>%
   ungroup()
 
 # Verified marks include a record in the BasinPITIndex where the FirstCensus field
 # determines the first year the PIT tag meets the criteria to be included in an estimate
+
+# New PITIndex doesn't have CensusYear and is Reach agnostic. Need to have Reach specific information
+# not just tagging date.
 BasinMarksZoneV <- BasinMarksZone %>%
   inner_join(BasinPITIndex %>% 
-               select(PIT, PITIndex, Species, Reach, FirstCensus), 
+               select(PITIndex, Species, Reach), 
              by = c("PIT" = "PIT", "Reach" = "Reach")) %>%
   filter(CensusYear >= FirstCensus) %>%
   group_by(Reach, DecimalZone, CensusYear, Species, PITIndex) %>%

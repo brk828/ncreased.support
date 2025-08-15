@@ -55,7 +55,7 @@ split_hourly <- function(df, id_col, start_col, end_col) {
 
 # function to download Ncreased Basin scanning tables from website
 download_basin <- function(sub_folder = ""){
-  NcreasedUrl<-"https://nativefishlab.net/BasinScanningIndex.RData"
+  NcreasedUrl<-"https://marsheducation.org/BasinScanningIndex.RData"
   dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
   download.file(NcreasedUrl, destfile = paste0(dest_folder, "BasinScanningIndex.RData"),cacheOK=TRUE, 
                 extra = options(timeout = 200)) 
@@ -63,7 +63,7 @@ download_basin <- function(sub_folder = ""){
 
 # function to download Ncreased backwater tables from website
 download_backwater <- function(sub_folder = ""){
-  NcreasedUrl<-"https://nativefishlab.net/BWScanningIndex.RData"
+  NcreasedUrl<-"https://marsheducation.org/BWScanningIndex.RData"
   dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
   download.file(NcreasedUrl, destfile = paste0(dest_folder, "BWScanningIndex.RData"),cacheOK=TRUE, 
                 extra = options(timeout = 200)) 
@@ -71,7 +71,7 @@ download_backwater <- function(sub_folder = ""){
 
 # function to download NGWG database table from website
 download_nfwg <- function(sub_folder = ""){
-  NcreasedUrl<-"https://nativefishlab.net/NFWGTable.RData"
+  NcreasedUrl<-"https://marsheducation.org/NFWGTable.RData"
   dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
   download.file(NcreasedUrl, destfile = paste0(dest_folder, "NFWGTable.RData"),cacheOK=TRUE, 
                 extra = options(timeout = 200)) 
