@@ -55,7 +55,7 @@ split_hourly <- function(df, id_col, start_col, end_col) {
 
 # function to download Ncreased Basin scanning tables from website
 download_basin <- function(sub_folder = ""){
-  NcreasedUrl<-"https://marsheducation.org/BasinScanningIndex.RData"
+  NcreasedUrl<-"https://ncreased.net/BasinScanningIndex.RData"
   dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
   download.file(NcreasedUrl, destfile = paste0(dest_folder, "BasinScanningIndex.RData"),cacheOK=TRUE, 
                 extra = options(timeout = 200)) 
@@ -63,17 +63,47 @@ download_basin <- function(sub_folder = ""){
 
 # function to download Ncreased backwater tables from website
 download_backwater <- function(sub_folder = ""){
-  NcreasedUrl<-"https://marsheducation.org/BWScanningIndex.RData"
+  NcreasedUrl<-"https://ncreased.net/BWScanningIndex.RData"
   dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
   download.file(NcreasedUrl, destfile = paste0(dest_folder, "BWScanningIndex.RData"),cacheOK=TRUE, 
                 extra = options(timeout = 200)) 
 }
 
-# function to download NGWG database table from website
+# function to download NFWG database tables from website
 download_nfwg <- function(sub_folder = ""){
-  NcreasedUrl<-"https://marsheducation.org/NFWGTable.RData"
+  NcreasedUrl<-"https://ncreased.net/NFWGAnalysis.RData"
   dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
-  download.file(NcreasedUrl, destfile = paste0(dest_folder, "NFWGTable.RData"),cacheOK=TRUE, 
+  download.file(NcreasedUrl, destfile = paste0(dest_folder, "NFWGAnalysis.RData"),cacheOK=TRUE, 
                 extra = options(timeout = 200)) 
+}
+
+# function to download Genetics database tables from website
+download_genetics <- function(sub_folder = ""){
+  NcreasedUrl<-"https://ncreased.net/GeneticsTables.RData"
+  dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
+  download.file(NcreasedUrl, destfile = paste0(dest_folder, "GeneticsTables.RData"),cacheOK=TRUE, 
+                extra = options(timeout = 200)) 
+}
+
+# function to download Genetics database tables from website
+download_PITindex <- function(sub_folder = ""){
+  NcreasedUrl<-"https://ncreased.net/PITIndex.RData"
+  dest_folder = ifelse(sub_folder == "", "", paste0(sub_folder, "/"))
+  download.file(NcreasedUrl, destfile = paste0(dest_folder, "PITIndex.RData"),cacheOK=TRUE, 
+                extra = options(timeout = 200)) 
+}
+
+# No NAs as a function for non-dataframe variables
+no_na <- function(x) {
+  if (is.na(x)) {
+    return(0)
+  } else {
+    return(x)
+  }
+}
+
+# For dataframe fields
+no_na_df <- function(x) {
+  ifelse(is.na(x), 0, x)
 }
 
