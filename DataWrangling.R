@@ -22,15 +22,14 @@ if(file.exists("data/BasinScanningIndex.RData")){
   load("data/BasinScanningIndex.RData")
 }
 
-download_PITindex("data")
-load("data/PITIndex.RData")
-
 download_nfwg("data")
 load("data/NFWGAnalysis.RData")
 
 rm(download_basin, data_info, data_date, BasinEffort)
 
 BasinContacts <- BasinContacts %>% filter(SurfaceConnection!= "constrained")
+
+
 # Marks are restricted to January or February of the census year (month < 3)
 # The census year is equal to the year of scanning
 BasinMarksZone <- BasinContacts %>% 
